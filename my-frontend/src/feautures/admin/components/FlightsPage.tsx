@@ -132,7 +132,14 @@ export default function FlightsPage() {
         </Button>
       }
     >
-      <Table rowKey="id" columns={columns} dataSource={flights} loading={loading} pagination={{ pageSize: 10 }} />
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={flights}
+        loading={loading}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: true }}
+      />
 
       <Modal
         title={editing ? "Редактировать рейс" : "Добавить рейс"}

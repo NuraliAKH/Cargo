@@ -6,7 +6,7 @@ import FlightsPage from "../feautures/admin/components/FlightsPage";
 
 export default function AdminPanel() {
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto md:p-0 p-4">
       <Typography.Title level={2}>Админ-панель</Typography.Title>
       <Tabs
         defaultActiveKey="parcels"

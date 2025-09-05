@@ -115,7 +115,7 @@ const RecipientTable: React.FC = () => {
       <Button type="primary" onClick={() => setOpen(true)} style={{ marginBottom: 16 }}>
         Add Recipient
       </Button>
-      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} scroll={{ x: true }} />
 
       <Modal
         title={editing ? "Edit Recipient" : "Create Recipient"}
