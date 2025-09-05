@@ -1,0 +1,22 @@
+/* HeroSection.css */
+.hero-section {
+  background-image: url('landing.png'); /* замените на ваш путь */
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 4rem 1rem;
+  color: white;
+  border-radius: 50px;
+}
+
+.hero-section .content {
+  max-width: 48rem;
+  margin: 0px auto  400px;
+}
+
+.hero-section .actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}

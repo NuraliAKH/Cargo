@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ParcelStatus {
+  AWAITING_AT_WAREHOUSE
+  AT_WAREHOUSE
+  IN_TRANSIT
+  AT_LOCAL_WAREHOUSE
+  WITH_COURIER
+  DELIVERED
+}
+
+enum RecipientType {
+  INDIVIDUAL // jismoniy shaxs
+  COMPANY // yuridik shaxs
+}
+
+enum FlightStatus {
+  SCHEDULED
+  DEPARTED
+  ARRIVED
+  CANCELLED
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  role      Role      @default(USER)
+  addresses Address[]
+  parcels   Parcel[]  @relation("UserParcels")
+  createdAt DateTime  @default(now())
+}
+
+model Address {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  line1     String
+  city      String
+  country   String
+  createdAt DateTime @default(now())
+}
+
+model Warehouse {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  firstName   String?
+  lastName    String?
+  addresLine1 String?
+  addresLine2 String?
+  city        String?
+  state       String?
+  zipcode     Int?
+  telephone   String?
+  cell        String?
+  parcels     Parcel[]
+  createdAt   DateTime @default(now())
+}
+
+model Recipient {
+  id             Int           @id @default(autoincrement())
+  type           RecipientType // INDIVIDUAL/COMPANY
+  firstName      String
+  lastName       String
+  middleName     String?
+  // Pasport ma'lumotlari (majburiy)
+  passportSeries String // masalan: "AA"
+  passportNumber String // masalan: "1234567" yoki "12345678" (format tekshiruvi servisda)
+  jshshir        String        @unique // 14 xonali JShShIR
+  phone          String?
+  addressLine1   String?
+  city           String?
+  country        String?
+  createdAt      DateTime      @default(now())
+  parcels        Parcel[]
+}
+
+model Flight {
+  id            Int          @id @default(autoincrement())
+  code          String?      @unique // masalan: HY123
+  status        FlightStatus @default(SCHEDULED)
+  departureAt   DateTime
+  departureFrom String
+  arrivalTo     String
+  arrivalAt     DateTime?
+  capacityKg    Decimal      @db.Decimal(10, 2)
+  parcels       Parcel[]
+  createdAt     DateTime     @default(now())
+}
+
+model Parcel {
+  id          Int          @id @default(autoincrement())
+  trackCode   String       @unique
+  description String
+  status      ParcelStatus @default(AWAITING_AT_WAREHOUSE)
+
+  user   User @relation("UserParcels", fields: [userId], references: [id])
+  userId Int
+
+  warehouse   Warehouse? @relation(fields: [warehouseId], references: [id])
+  warehouseId Int?
+
+  price Decimal @db.Decimal(10, 2)
+
+  recipient   Recipient @relation(fields: [recipientId], references: [id])
+  recipientId Int
+
+  flight   Flight? @relation(fields: [flightId], references: [id])
+  flightId Int?
+
+  history   ParcelStatusHistory[]
+  createdAt DateTime              @default(now())
+}
+
+model ParcelStatusHistory {
+  id        Int          @id @default(autoincrement())
+  parcel    Parcel       @relation(fields: [parcelId], references: [id])
+  parcelId  Int
+  status    ParcelStatus
+  createdAt DateTime     @default(now())
+}
