@@ -7,9 +7,19 @@ import { ParcelsModule } from "./parcels/parcels.module";
 import { AddressesModule } from "./addresses/addresses.module";
 import { FlightModule } from "./flight/flight.module";
 import { RecipientModule } from "./recipient/recipient.module";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
-  imports: [AuthModule, UsersModule, WarehousesModule, ParcelsModule, AddressesModule, FlightModule, RecipientModule],
+  imports: [
+    ScheduleModule.forRoot(),
+    AuthModule,
+    UsersModule,
+    WarehousesModule,
+    ParcelsModule,
+    AddressesModule,
+    FlightModule,
+    RecipientModule,
+  ],
   providers: [PrismaService],
 })
 export class AppModule {}

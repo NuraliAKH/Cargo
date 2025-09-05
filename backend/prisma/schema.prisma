@@ -34,14 +34,15 @@ enum FlightStatus {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  name      String
-  role      Role      @default(USER)
-  addresses Address[]
-  parcels   Parcel[]  @relation("UserParcels")
-  createdAt DateTime  @default(now())
+  id         Int       @id @default(autoincrement())
+  phone      String    @unique
+  isVerified Boolean   @default(false)
+  password   String
+  name       String
+  role       Role      @default(USER)
+  addresses  Address[]
+  parcels    Parcel[]  @relation("UserParcels")
+  createdAt  DateTime  @default(now())
 }
 
 model Address {
@@ -132,4 +133,12 @@ model ParcelStatusHistory {
   parcelId  Int
   status    ParcelStatus
   createdAt DateTime     @default(now())
+}
+
+model VerificationCode {
+  id        Int      @id @default(autoincrement())
+  phone     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
