@@ -2,11 +2,7 @@ import { Layout, Menu, Button, Drawer, Grid, Typography, Image } from "antd";
 import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Landing from "./pages/Landing";
-import Auth from "./pages/Auth";
-import Profile from "./pages/Profile";
-import Admin from "./pages/Admin";
 import api from "./api";
-import { PrivateRoute, RoleRoute } from "./routes/PrivateRoute";
 import AppFooter from "./feautures/landing/components/Footer";
 
 const { useBreakpoint } = Grid;
@@ -41,7 +37,6 @@ export default function App() {
     { key: "flights", label: <a href="#flights">Рейсы</a> },
     { key: "how-it-works", label: <a href="#how-it-works">Как это работает</a> },
     { key: "services", label: <a href="#services">Услуги</a> },
-    { key: "reviews", label: <a href="#reviews">Отзывы</a> },
   ];
 
   return (
@@ -84,23 +79,6 @@ export default function App() {
         <Layout.Content>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/auth" element={<Auth onAuth={loadMe} />} />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute me={me}>
-                  <Profile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <RoleRoute me={me} role="ADMIN">
-                  <Admin />
-                </RoleRoute>
-              }
-            />
           </Routes>
         </Layout.Content>
 
