@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Modal, Form, Input, Select, message, InputNumber } from "antd";
 import api from "../../../api";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onCreated: () => void; // вызови чтобы обновить список после создания
+  onCreated: () => void;
 };
 
 export default function AddParcelModal({ open, onClose, onCreated }: Props) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [warehouses, setWarehouses] = useState<any[]>([]);
   const [recipients, setRecipients] = useState<any[]>([]);
@@ -34,14 +36,14 @@ export default function AddParcelModal({ open, onClose, onCreated }: Props) {
         warehouseId: values.warehouseId || null,
         recipientId: values.recipientId,
         flightId: values.flightId || null,
-        status: "AWAITING_AT_WAREHOUSE", // статус по умолчанию
+        status: "AWAITING_AT_WAREHOUSE",
       });
-      message.success("Посылка добавлена");
+      message.success(t("my-parcels.added"));
       form.resetFields();
       onCreated();
       onClose();
     } catch (e) {
-      message.error("Не удалось добавить посылку");
+      message.error(t("my-parcels.add_error"));
     } finally {
       setSubmitting(false);
     }
@@ -49,30 +51,42 @@ export default function AddParcelModal({ open, onClose, onCreated }: Props) {
 
   return (
     <Modal
-      title="Добавить посылку"
+      title={t("my-parcels.add_modal_title")}
       open={open}
       onCancel={onClose}
-      okText="Сохранить"
+      okText={t("my-parcels.save")}
       confirmLoading={submitting}
       onOk={() => form.submit()}
       destroyOnClose
     >
       <Form layout="vertical" form={form} onFinish={onFinish}>
-        <Form.Item name="trackCode" label="Трек-номер" rules={[{ required: true, message: "Введите трек-номер" }]}>
-          <Input placeholder="Например: AB123456789CN" />
+        <Form.Item
+          name="trackCode"
+          label={t("my-parcels.track_code")}
+          rules={[{ required: true, message: t("my-parcels.errors.track_code") }]}
+        >
+          <Input placeholder={t("my-parcels.track_placeholder")} />
         </Form.Item>
 
-        <Form.Item name="description" label="Комментарий">
-          <Input.TextArea placeholder="Примечания к посылке" />
+        <Form.Item name="description" label={t("my-parcels.comment")}>
+          <Input.TextArea placeholder={t("my-parcels.comment_placeholder")} />
         </Form.Item>
 
-        <Form.Item name="price" label="Цена ($)" rules={[{ required: true, message: "Введите цену" }]}>
+        <Form.Item
+          name="price"
+          label={t("my-parcels.price")}
+          rules={[{ required: true, message: t("my-parcels.errors.price") }]}
+        >
           <InputNumber style={{ width: "100%" }} min={0} step={0.01} />
         </Form.Item>
 
-        <Form.Item name="recipientId" label="Получатель" rules={[{ required: true, message: "Выберите получателя" }]}>
+        <Form.Item
+          name="recipientId"
+          label={t("my-parcels.recipient")}
+          rules={[{ required: true, message: t("my-parcels.errors.recipient") }]}
+        >
           <Select
-            placeholder="Выберите получателя"
+            placeholder={t("my-parcels.select_recipient")}
             options={recipients.map((r: any) => ({
               value: r.id ?? r._id,
               label: `${r.lastName} ${r.firstName}`,
@@ -80,10 +94,14 @@ export default function AddParcelModal({ open, onClose, onCreated }: Props) {
           />
         </Form.Item>
 
-        <Form.Item name="warehouseId" label="Склад" rules={[{ required: true, message: "Выберите склад" }]}>
+        <Form.Item
+          name="warehouseId"
+          label={t("my-parcels.warehouse")}
+          rules={[{ required: true, message: t("my-parcels.errors.warehouse") }]}
+        >
           <Select
             allowClear
-            placeholder="Выберите склад"
+            placeholder={t("my-parcels.select_warehouse")}
             options={warehouses.map((w: any) => ({
               value: w.id ?? w._id,
               label: w.name,
@@ -91,13 +109,13 @@ export default function AddParcelModal({ open, onClose, onCreated }: Props) {
           />
         </Form.Item>
 
-        <Form.Item name="flightId" label="Рейс (опционально)">
+        <Form.Item name="flightId" label={t("my-parcels.flight")}>
           <Select
             allowClear
-            placeholder="Выберите рейс"
+            placeholder={t("my-parcels.select_flight")}
             options={flights.map((f: any) => ({
               value: f.id ?? f._id,
-              label: f.code ?? `Рейс #${f.id}`,
+              label: f.code ?? `${t("my-parcels.flight_default")} #${f.id}`,
             }))}
           />
         </Form.Item>

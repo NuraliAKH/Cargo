@@ -1,0 +1,262 @@
+{
+  "admin": {
+    "title": "Админ-панель",
+    "tabs": {
+      "users": "Пользователи",
+      "parcels": "Посылки",
+      "addresses": "Адреса",
+      "flights": "Рейсы"
+    }
+  },
+  "auth": {
+    "loginTab": "Войти",
+    "registerTab": "Регистрация",
+    "login": "Войти",
+    "getCode": "Получить код",
+    "confirm": "Подтвердить",
+    "name": "Имя",
+    "phone": "Телефон",
+    "password": "Пароль",
+    "smsCode": "Код из SMS",
+    "phoneRequired": "Введите номер телефона",
+    "phoneInvalid": "Некорректный номер",
+    "passwordRequired": "Введите пароль",
+    "enterCode": "Введите код",
+    "resend": "Отправить повторно",
+    "resendCooldown": "Отправить повторно ({{seconds}}с)",
+    "loginSuccess": "Вход выполнен",
+    "loginError": "Ошибка входа",
+    "codeSent": "Код отправлен на номер",
+    "error": "Ошибка",
+    "registerSuccess": "Регистрация выполнена",
+    "invalidCode": "Неверный код"
+  },
+  "profile": {
+    "menu": {
+      "warehouses": "Склады",
+      "parcels": "Посылки",
+      "addresses": "Адреса",
+      "recipient": "Получатель",
+      "flights": "Рейсы"
+    }
+  },
+  "warehouses": {
+    "addWarehouse": "Добавить склад",
+    "added": "Склад добавлен",
+    "deleted": "Удалено",
+    "delete": "Удалить",
+    "modalTitle": "Добавить склад",
+    "columns": {
+      "id": "ID",
+      "name": "Название",
+      "location": "Локация",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "addresLine1": "Адрес 1",
+      "addresLine2": "Адрес 2",
+      "city": "Город",
+      "state": "Штат/Регион",
+      "zipcode": "Почтовый индекс",
+      "telephone": "Телефон",
+      "cell": "Мобильный",
+      "createdAt": "Создан",
+      "actions": "Действия"
+    },
+    "form": {
+      "name": "Название",
+      "nameRequired": "Введите название",
+      "location": "Локация",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "addresLine1": "Адрес 1",
+      "addresLine2": "Адрес 2",
+      "city": "Город",
+      "state": "Штат/Регион",
+      "zipcode": "Почтовый индекс",
+      "telephone": "Телефон",
+      "cell": "Мобильный"
+    }
+  },
+  "flights": {
+    "title": "Рейсы",
+    "add": "Добавить рейс",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "deleted": "Рейс удалён",
+    "created": "Рейс создан",
+    "updated": "Рейс обновлён",
+    "confirmDelete": "Удалить рейс?",
+    "errors": {
+      "load": "Не удалось загрузить рейсы",
+      "save": "Ошибка при сохранении рейса",
+      "delete": "Не удалось удалить рейс"
+    },
+    "columns": {
+      "code": "Код",
+      "status": "Статус",
+      "departureFrom": "Отправление",
+      "arrivalTo": "Прибытие",
+      "departureAt": "Дата вылета",
+      "arrivalAt": "Дата прибытия",
+      "actions": "Действия"
+    },
+    "status": {
+      "SCHEDULED": "Запланирован",
+      "DEPARTED": "Вылетел",
+      "ARRIVED": "Прибыл",
+      "CANCELLED": "Отменён"
+    },
+    "modal": {
+      "add": "Добавить рейс",
+      "edit": "Редактировать рейс"
+    },
+    "form": {
+      "code": "Код рейса",
+      "status": "Статус",
+      "departureFrom": "Город вылета",
+      "departureFromRequired": "Введите город вылета",
+      "arrivalTo": "Город прибытия",
+      "arrivalToRequired": "Введите город прибытия",
+      "dates": "Дата и время",
+      "datesRequired": "Укажите даты"
+    },
+    "refresh": "Обновить",
+    "noStatus": "Нет статуса"
+  },
+  "parcels": {
+    "all": "Все",
+    "add": "Добавить посылку",
+    "title": "Посылки",
+    "create": "Создать посылку",
+    "edit": "Редактировать посылку",
+    "delete": "Удалить посылку?",
+    "update": "Обновить",
+    "created": "Посылка создана",
+    "updated": "Посылка обновлена",
+    "deleted": "Посылка удалена",
+    "tracking_code": "Трек-код",
+    "owner": "Владелец",
+    "warehouse": "Склад",
+    "status": "Статус",
+    "created_at": "Создано",
+    "filters": {
+      "search_email": "Поиск по email",
+      "search_tracking": "Поиск по трек-коду",
+      "date_range": "Диапазон дат"
+    },
+    "statuses": {
+      "AWAITING_AT_WAREHOUSE": "Ожидается на складе",
+      "AT_WAREHOUSE": "На складе",
+      "IN_TRANSIT": "В пути",
+      "AT_LOCAL_WAREHOUSE": "В местном складе",
+      "WITH_COURIER": "У курьера",
+      "DELIVERED": "Доставлено"
+    }
+  },
+  "users": {
+    "add": "Добавить",
+    "email": "Email",
+    "password": "Пароль",
+    "role": "Роль",
+    "roles": {
+      "user": "Пользователь",
+      "admin": "Администратор"
+    },
+    "actions": "Действия",
+    "delete": "Удалить",
+    "deleted": "Пользователь удалён",
+    "create_modal": "Создать пользователя",
+    "created": "Пользователь создан",
+    "role_changed": "Роль изменена",
+    "role_change_error": "Не удалось изменить роль"
+  },
+  "my-parcels": {
+    "add_modal_title": "Добавить посылку",
+    "track_code": "Трек-номер",
+    "track_placeholder": "Например: AB123456789CN",
+    "comment": "Комментарий",
+    "comment_placeholder": "Примечания к посылке",
+    "price": "Цена ($)",
+    "recipient": "Получатель",
+    "warehouse": "Склад",
+    "flight": "Рейс (опционально)",
+    "select_recipient": "Выберите получателя",
+    "select_warehouse": "Выберите склад",
+    "select_flight": "Выберите рейс",
+    "flight_default": "Рейс",
+    "save": "Сохранить",
+    "added": "Посылка добавлена",
+    "add_error": "Не удалось добавить посылку",
+    "errors": {
+      "track_code": "Введите трек-номер",
+      "price": "Введите цену",
+      "recipient": "Выберите получателя",
+      "warehouse": "Выберите склад"
+    }
+  },
+  "addresses": {
+    "titleMy": "Мои адреса",
+    "titleAdd": "Добавить адрес",
+    "fieldLabel": "Название",
+    "fieldLine1": "Адрес 1",
+    "fieldLine2": "Адрес 2",
+    "fieldCity": "Город",
+    "fieldCountry": "Страна",
+    "phLabel": "Например: Дом, Офис",
+    "msgAddSuccess": "Адрес добавлен",
+    "msgAddError": "Не удалось добавить адрес",
+    "msgDeleteSuccess": "Адрес удалён",
+    "msgDeleteError": "Не удалось удалить адрес",
+    "confirmDelete": "Удалить адрес?",
+    "errLabel": "Введите название",
+    "errLine1": "Введите адрес",
+    "errCity": "Введите город",
+    "errCountry": "Введите страну"
+  },
+  "common": {
+    "yes": "Да",
+    "no": "Нет",
+    "delete": "Удалить",
+    "save": "Сохранить"
+  },
+  "recipients": {
+    "add": "Добавить получателя",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "editTitle": "Редактировать получателя",
+    "createTitle": "Создать получателя",
+    "confirmDelete": "Удалить этого получателя?",
+    "deleteSuccess": "Получатель удален",
+    "createSuccess": "Получатель создан",
+    "updateSuccess": "Получатель обновлен",
+    "yes": "Да",
+    "no": "Нет",
+    "type": "Тип",
+    "individual": "Физическое лицо",
+    "company": "Компания",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "middleName": "Отчество",
+    "passportSeries": "Серия паспорта",
+    "passportNumber": "Номер паспорта",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "city": "Город",
+    "country": "Страна",
+    "actions": "Действия"
+  },
+  "warehousesTitle": "Адреса складов",
+  "warehouseDefault": "Склад",
+  "copied": "Скопировано!",
+  "labels": {
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "addressLine1": "Адрес, строка 1",
+    "addressLine2": "Адрес, строка 2",
+    "city": "Город",
+    "state": "Штат",
+    "zipcode": "Почтовый индекс",
+    "telephone": "Телефон",
+    "cell": "Мобильный"
+  }
+}

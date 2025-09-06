@@ -1,6 +1,13 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Select, Space } from "antd";
 import { useState } from "react";
-import { HomeOutlined, InboxOutlined, EnvironmentOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  InboxOutlined,
+  EnvironmentOutlined,
+  MenuUnfoldOutlined,
+  GlobalOutlined,
+} from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 import { Warehouses } from "../feautures/profile/components/WareHouse";
 import { Parcels } from "../feautures/profile/components/Percels";
 import { Addresses } from "../feautures/profile/components/Adresses";
@@ -8,8 +15,10 @@ import RecipientTable from "../feautures/profile/components/RecipientTable";
 import FlightsList from "../feautures/profile/components/FlightsChess";
 
 const { Sider, Content } = Layout;
+const { Option } = Select;
 
 export default function Profile() {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("warehouses");
 
@@ -46,11 +55,11 @@ export default function Profile() {
           selectedKeys={[selectedKey]}
           onClick={e => setSelectedKey(e.key)}
           items={[
-            { key: "warehouses", label: "Склады", icon: <HomeOutlined /> },
-            { key: "parcels", label: "Посылки", icon: <InboxOutlined /> },
-            { key: "addresses", label: "Адреса", icon: <EnvironmentOutlined /> },
-            { key: "recipient", label: "Получатель", icon: <EnvironmentOutlined /> },
-            { key: "flights", label: "Рейсы", icon: <MenuUnfoldOutlined /> },
+            { key: "warehouses", label: t("profile.menu.warehouses"), icon: <HomeOutlined /> },
+            { key: "parcels", label: t("profile.menu.parcels"), icon: <InboxOutlined /> },
+            { key: "addresses", label: t("profile.menu.addresses"), icon: <EnvironmentOutlined /> },
+            { key: "recipient", label: t("profile.menu.recipient"), icon: <EnvironmentOutlined /> },
+            { key: "flights", label: t("profile.menu.flights"), icon: <MenuUnfoldOutlined /> },
           ]}
         />
       </Sider>

@@ -1,4 +1,4 @@
-import { Layout, Menu, Button, Drawer, Grid, Typography, Image } from "antd";
+import { Layout, Menu, Button, Drawer, Grid, Typography, Image, Space, Select } from "antd";
 import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Auth from "./pages/Auth";
@@ -6,14 +6,21 @@ import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import api from "./api";
 import { PrivateRoute, RoleRoute } from "./routes/PrivateRoute";
-
+import { Option } from "antd/es/mentions";
+import { useTranslation } from "react-i18next";
+import { GlobalOutlined } from "@ant-design/icons";
 const { useBreakpoint } = Grid;
 
 export default function App() {
   const { pathname } = useLocation();
   const screens = useBreakpoint();
   const [open, setOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
   const [me, setMe] = useState<any>(undefined);
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
   const nav = useNavigate();
   const loadMe = async () => {
     try {
@@ -45,12 +52,39 @@ export default function App() {
             {screens.md ? (
               <div className="flex items-center gap-4">
                 {me ? (
-                  <div className="flex items-center gap-2 text-black">
-                    <span>{me.name}</span>
+                  <div className="flex items-center gap-0 text-black">
+                    <div className="flex flex-col leading-tight">
+                      <span className="font-medium">{me.name}</span>
+                      <span className="text-xs text-gray-500">{me.id}</span>
+                    </div>
+                    <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
+                      <Select
+                        defaultValue={i18n.language}
+                        style={{ width: 120 }}
+                        onChange={changeLanguage}
+                        suffixIcon={<GlobalOutlined />}
+                      >
+                        <Option value="ru">Русский</Option>
+                        <Option value="uz">Oʻzbekcha</Option>
+                        <Option value="en">English</Option>
+                      </Select>
+                    </Space>
                     <Button onClick={logout}>Выйти</Button>
                   </div>
                 ) : (
                   <div className="space-x-2">
+                    <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
+                      <Select
+                        defaultValue={i18n.language}
+                        style={{ width: 120 }}
+                        onChange={changeLanguage}
+                        suffixIcon={<GlobalOutlined />}
+                      >
+                        <Option value="ru">Русский</Option>
+                        <Option value="uz">Oʻzbekcha</Option>
+                        <Option value="en">English</Option>
+                      </Select>
+                    </Space>
                     <Link to="/auth?tab=login">
                       <Button>Войти</Button>
                     </Link>

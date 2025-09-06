@@ -1,13 +1,16 @@
 import { Table, Button, Modal, Form, Input, Select, message } from "antd";
 import { useEffect, useState } from "react";
 import api from "../../../api";
+import { useTranslation } from "react-i18next";
 
 export default function UsersTable() {
+  const { t } = useTranslation();
   const [data, setData] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
 
   const load = () => api.get("/api/users").then(r => setData(r.data));
+
   useEffect(() => {
     load();
   }, []);
@@ -15,7 +18,7 @@ export default function UsersTable() {
   const onCreate = () => {
     form.validateFields().then(values => {
       api.post("/api/users", values).then(() => {
-        message.success("Пользователь создан");
+        message.success(t("users.created"));
         setOpen(false);
         form.resetFields();
         load();
@@ -26,17 +29,17 @@ export default function UsersTable() {
   const onRoleChange = async (id: number, role: string) => {
     try {
       await api.put(`/api/users/${id}/role`, { role });
-      message.success("Роль изменена");
+      message.success(t("users.role_changed"));
       load();
     } catch {
-      message.error("Не удалось изменить роль");
+      message.error(t("users.role_change_error"));
     }
   };
 
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
-        Добавить
+        {t("users.add")}
       </Button>
 
       <Table
@@ -44,54 +47,54 @@ export default function UsersTable() {
         scroll={{ x: true }}
         dataSource={data}
         columns={[
-          { title: "Email", dataIndex: "email" },
+          { title: t("users.email"), dataIndex: "email" },
           {
-            title: "Роль",
+            title: t("users.role"),
             dataIndex: "role",
             render: (role: string, record: any) => (
               <Select
                 value={role}
                 onChange={newRole => onRoleChange(record.id, newRole)}
                 options={[
-                  { value: "USER", label: "Пользователь" },
-                  { value: "ADMIN", label: "Администратор" },
+                  { value: "USER", label: t("users.roles.user") },
+                  { value: "ADMIN", label: t("users.roles.admin") },
                 ]}
                 style={{ width: 150 }}
               />
             ),
           },
           {
-            title: "Действия",
+            title: t("users.actions"),
             render: (_, record) => (
               <Button
                 danger
                 onClick={() => {
                   api.delete(`/api/users/${record.id}`).then(() => {
-                    message.success("Удалено");
+                    message.success(t("users.deleted"));
                     load();
                   });
                 }}
               >
-                Удалить
+                {t("users.delete")}
               </Button>
             ),
           },
         ]}
       />
 
-      <Modal title="Создать пользователя" open={open} onCancel={() => setOpen(false)} onOk={onCreate} destroyOnClose>
+      <Modal title={t("users.create_modal")} open={open} onCancel={() => setOpen(false)} onOk={onCreate} destroyOnClose>
         <Form form={form} layout="vertical">
-          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+          <Form.Item name="email" label={t("users.email")} rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="password" label="Пароль" rules={[{ required: true }]}>
+          <Form.Item name="password" label={t("users.password")} rules={[{ required: true }]}>
             <Input.Password />
           </Form.Item>
-          <Form.Item name="role" label="Роль" initialValue="USER" rules={[{ required: true }]}>
+          <Form.Item name="role" label={t("users.role")} initialValue="USER" rules={[{ required: true }]}>
             <Select
               options={[
-                { value: "USER", label: "Пользователь" },
-                { value: "ADMIN", label: "Администратор" },
+                { value: "USER", label: t("users.roles.user") },
+                { value: "ADMIN", label: t("users.roles.admin") },
               ]}
             />
           </Form.Item>

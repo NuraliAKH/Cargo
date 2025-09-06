@@ -2,8 +2,10 @@ import { Tabs, Form, Input, Button, message, Card } from "antd";
 import api from "../api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Auth({ onAuth }: { onAuth?: () => void }) {
+  const { t } = useTranslation();
   const [sp] = useSearchParams();
   const nav = useNavigate();
   const start = sp.get("tab") || "login";
@@ -20,43 +22,40 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  // ЛОГИН (без кода)
   const login = async (v: any) => {
     try {
       const { data } = await api.post("/api/auth/login", v);
       localStorage.setItem("token", data.access_token);
-      message.success("Вход выполнен");
+      message.success(t("auth.loginSuccess"));
       onAuth?.();
       nav("/");
     } catch (e: any) {
-      message.error(e?.response?.data?.message || "Ошибка входа");
+      message.error(e?.response?.data?.message || t("auth.loginError"));
     }
   };
 
-  // РЕГИСТРАЦИЯ: шаг 1 — отправка кода
   const startRegistration = async (v: any) => {
     try {
       await api.post("/api/auth/register", v);
       setRegisterData(v);
       setIsCodeSent(true);
       setCooldown(60);
-      message.success("Код отправлен на номер");
+      message.success(t("auth.codeSent"));
     } catch (e: any) {
-      message.error(e?.response?.data?.message || "Ошибка");
+      message.error(e?.response?.data?.message || t("auth.error"));
     }
   };
 
-  // РЕГИСТРАЦИЯ: шаг 2 — подтверждение кода
   const confirmRegistration = async (v: any) => {
     if (!registerData) return;
     try {
       const { data } = await api.post("/api/auth/verify", { phone: registerData.phone, code: v.code });
       localStorage.setItem("token", data.access_token);
-      message.success("Регистрация выполнена");
+      message.success(t("auth.registerSuccess"));
       onAuth?.();
       nav("/");
     } catch (e: any) {
-      message.error(e?.response?.data?.message || "Неверный код");
+      message.error(e?.response?.data?.message || t("auth.invalidCode"));
     }
   };
 
@@ -64,19 +63,23 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
     <Form layout="vertical" onFinish={login}>
       <Form.Item
         name="phone"
-        label="Телефон"
+        label={t("auth.phone")}
         rules={[
-          { required: true, message: "Введите номер телефона" },
-          { pattern: /^\+?[0-9]{10,15}$/, message: "Некорректный номер" },
+          { required: true, message: t("auth.phoneRequired") },
+          { pattern: /^\+?[0-9]{10,15}$/, message: t("auth.phoneInvalid") },
         ]}
       >
         <Input placeholder="+998901234567" />
       </Form.Item>
-      <Form.Item name="password" label="Пароль" rules={[{ required: true, message: "Введите пароль" }]}>
+      <Form.Item
+        name="password"
+        label={t("auth.password")}
+        rules={[{ required: true, message: t("auth.passwordRequired") }]}
+      >
         <Input.Password />
       </Form.Item>
       <Button type="primary" htmlType="submit" className="w-full">
-        Войти
+        {t("auth.login")}
       </Button>
     </Form>
   );
@@ -84,38 +87,42 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
   const renderRegister = () =>
     !isCodeSent ? (
       <Form layout="vertical" onFinish={startRegistration}>
-        <Form.Item name="name" label="Имя" rules={[{ required: true }]}>
+        <Form.Item name="name" label={t("auth.name")} rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item
           name="phone"
-          label="Телефон"
+          label={t("auth.phone")}
           rules={[
-            { required: true, message: "Введите номер телефона" },
-            { pattern: /^\+?[0-9]{10,15}$/, message: "Некорректный номер" },
+            { required: true, message: t("auth.phoneRequired") },
+            { pattern: /^\+?[0-9]{10,15}$/, message: t("auth.phoneInvalid") },
           ]}
         >
           <Input placeholder="+998901234567" />
         </Form.Item>
-        <Form.Item name="password" label="Пароль" rules={[{ required: true, message: "Введите пароль" }]}>
+        <Form.Item
+          name="password"
+          label={t("auth.password")}
+          rules={[{ required: true, message: t("auth.passwordRequired") }]}
+        >
           <Input.Password />
         </Form.Item>
         <Button type="primary" htmlType="submit" className="w-full">
-          Получить код
+          {t("auth.getCode")}
         </Button>
       </Form>
     ) : (
       <Form layout="vertical" onFinish={confirmRegistration}>
-        <Form.Item name="code" label="Код из SMS" rules={[{ required: true, message: "Введите код" }]}>
+        <Form.Item name="code" label={t("auth.smsCode")} rules={[{ required: true, message: t("auth.enterCode") }]}>
           <Input />
         </Form.Item>
         <div className="flex justify-between mb-2">
           <Button type="link" disabled={cooldown > 0} onClick={() => registerData && startRegistration(registerData)}>
-            {cooldown > 0 ? `Отправить повторно (${cooldown}с)` : "Отправить повторно"}
+            {cooldown > 0 ? t("auth.resendCooldown", { seconds: cooldown }) : t("auth.resend")}
           </Button>
         </div>
         <Button type="primary" htmlType="submit" className="w-full">
-          Подтвердить
+          {t("auth.confirm")}
         </Button>
       </Form>
     );
@@ -126,8 +133,8 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
         <Tabs
           defaultActiveKey={start}
           items={[
-            { key: "login", label: "Войти", children: renderLogin() },
-            { key: "register", label: "Регистрация", children: renderRegister() },
+            { key: "login", label: t("auth.loginTab"), children: renderLogin() },
+            { key: "register", label: t("auth.registerTab"), children: renderRegister() },
           ]}
         />
       </Card>

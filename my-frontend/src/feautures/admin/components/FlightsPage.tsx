@@ -1,30 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Modal,
-  Form,
-  Input,
-  DatePicker,
-  InputNumber,
-  Select,
-  Table,
-  message,
-  Popconfirm,
-  Tag,
-} from "antd";
+import { Button, Card, Modal, Form, Input, DatePicker, Select, Table, message, Popconfirm, Tag } from "antd";
+import { useTranslation } from "react-i18next";
 import api from "../../../api";
 
 const { RangePicker } = DatePicker;
 
-const STATUS_LABELS: Record<string, string> = {
-  SCHEDULED: "Запланирован",
-  DEPARTED: "Вылетел",
-  ARRIVED: "Прибыл",
-  CANCELLED: "Отменён",
-};
-
 export default function FlightsPage() {
+  const { t } = useTranslation();
   const [flights, setFlights] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -37,7 +19,7 @@ export default function FlightsPage() {
       const res = await api.get("/api/flights");
       setFlights(res.data);
     } catch {
-      message.error("Не удалось загрузить рейсы");
+      message.error(t("flights.errors.load"));
     } finally {
       setLoading(false);
     }
@@ -60,10 +42,10 @@ export default function FlightsPage() {
 
       if (editing) {
         await api.put(`/api/flights/${editing.id}`, payload);
-        message.success("Рейс обновлён");
+        message.success(t("flights.updated"));
       } else {
         await api.post("/api/flights", payload);
-        message.success("Рейс создан");
+        message.success(t("flights.created"));
       }
 
       setOpenModal(false);
@@ -71,29 +53,41 @@ export default function FlightsPage() {
       setEditing(null);
       load();
     } catch {
-      message.error("Ошибка при сохранении рейса");
+      message.error(t("flights.errors.save"));
     }
   };
 
   const onDelete = async (id: number) => {
     try {
       await api.delete(`/api/flights/${id}`);
-      message.success("Рейс удалён");
+      message.success(t("flights.deleted"));
       load();
     } catch {
-      message.error("Не удалось удалить рейс");
+      message.error(t("flights.errors.delete"));
     }
   };
 
   const columns = [
-    { title: "Код", dataIndex: "code" },
-    { title: "Статус", dataIndex: "status", render: (s: string) => <Tag>{STATUS_LABELS[s]}</Tag> },
-    { title: "Отправление", dataIndex: "departureFrom" },
-    { title: "Прибытие", dataIndex: "arrivalTo" },
-    { title: "Дата вылета", dataIndex: "departureAt", render: (d: string) => new Date(d).toLocaleString() },
-    { title: "Дата прибытия", dataIndex: "arrivalAt", render: (d: string) => (d ? new Date(d).toLocaleString() : "-") },
+    { title: t("flights.columns.code"), dataIndex: "code" },
     {
-      title: "Действия",
+      title: t("flights.columns.status"),
+      dataIndex: "status",
+      render: (s: string) => <Tag>{t(`flights.status.${s}`)}</Tag>,
+    },
+    { title: t("flights.columns.departureFrom"), dataIndex: "departureFrom" },
+    { title: t("flights.columns.arrivalTo"), dataIndex: "arrivalTo" },
+    {
+      title: t("flights.columns.departureAt"),
+      dataIndex: "departureAt",
+      render: (d: string) => new Date(d).toLocaleString(),
+    },
+    {
+      title: t("flights.columns.arrivalAt"),
+      dataIndex: "arrivalAt",
+      render: (d: string) => (d ? new Date(d).toLocaleString() : "-"),
+    },
+    {
+      title: t("flights.columns.actions"),
       render: (_: any, record: any) => (
         <>
           <Button
@@ -106,16 +100,15 @@ export default function FlightsPage() {
                 departureFrom: record.departureFrom,
                 arrivalTo: record.arrivalTo,
                 dates: [record.departureAt, record.arrivalAt].filter(Boolean),
-                capacityKg: Number(record.capacityKg),
               });
               setOpenModal(true);
             }}
           >
-            Редактировать
+            {t("flights.edit")}
           </Button>
-          <Popconfirm title="Удалить рейс?" onConfirm={() => onDelete(record.id)}>
+          <Popconfirm title={t("flights.confirmDelete")} onConfirm={() => onDelete(record.id)}>
             <Button type="link" danger>
-              Удалить
+              {t("flights.delete")}
             </Button>
           </Popconfirm>
         </>
@@ -125,10 +118,10 @@ export default function FlightsPage() {
 
   return (
     <Card
-      title="Рейсы"
+      title={t("flights.title")}
       extra={
         <Button type="primary" onClick={() => setOpenModal(true)}>
-          Добавить рейс
+          {t("flights.add")}
         </Button>
       }
     >
@@ -142,7 +135,7 @@ export default function FlightsPage() {
       />
 
       <Modal
-        title={editing ? "Редактировать рейс" : "Добавить рейс"}
+        title={editing ? t("flights.modal.edit") : t("flights.modal.add")}
         open={openModal}
         onCancel={() => {
           setOpenModal(false);
@@ -153,31 +146,42 @@ export default function FlightsPage() {
         destroyOnClose
       >
         <Form layout="vertical" form={form} onFinish={onSubmit}>
-          <Form.Item name="code" label="Код рейса">
-            <Input placeholder="Например: HY123" />
+          <Form.Item name="code" label={t("flights.form.code")}>
+            <Input placeholder="HY123" />
           </Form.Item>
 
-          <Form.Item name="status" label="Статус" initialValue="SCHEDULED">
-            <Select options={Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label }))} />
+          <Form.Item name="status" label={t("flights.form.status")} initialValue="SCHEDULED">
+            <Select
+              options={[
+                { value: "SCHEDULED", label: t("flights.status.SCHEDULED") },
+                { value: "DEPARTED", label: t("flights.status.DEPARTED") },
+                { value: "ARRIVED", label: t("flights.status.ARRIVED") },
+                { value: "CANCELLED", label: t("flights.status.CANCELLED") },
+              ]}
+            />
           </Form.Item>
 
           <Form.Item
             name="departureFrom"
-            label="Город вылета"
-            rules={[{ required: true, message: "Введите город вылета" }]}
+            label={t("flights.form.departureFrom")}
+            rules={[{ required: true, message: t("flights.form.departureFromRequired") }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
             name="arrivalTo"
-            label="Город прибытия"
-            rules={[{ required: true, message: "Введите город прибытия" }]}
+            label={t("flights.form.arrivalTo")}
+            rules={[{ required: true, message: t("flights.form.arrivalToRequired") }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item name="dates" label="Дата и время" rules={[{ required: true, message: "Укажите даты" }]}>
+          <Form.Item
+            name="dates"
+            label={t("flights.form.dates")}
+            rules={[{ required: true, message: t("flights.form.datesRequired") }]}
+          >
             <RangePicker showTime format="YYYY-MM-DD HH:mm" />
           </Form.Item>
         </Form>

@@ -3,17 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { EditOutlined, DeleteOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import api from "../../../api";
 import dayjs, { Dayjs } from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
-
-const STATUS_OPTIONS = [
-  { value: "AWAITING_AT_WAREHOUSE", label: "Ожидается на складе" },
-  { value: "AT_WAREHOUSE", label: "На складе" },
-  { value: "IN_TRANSIT", label: "В пути" },
-  { value: "AT_LOCAL_WAREHOUSE", label: "В местном складе" },
-  { value: "WITH_COURIER", label: "У курьера" },
-  { value: "DELIVERED", label: "Доставлено" },
-];
 
 interface Parcel {
   user: any;
@@ -26,6 +18,7 @@ interface Parcel {
 }
 
 export default function ParcelsTable() {
+  const { t } = useTranslation();
   const [data, setData] = useState<Parcel[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,6 +28,17 @@ export default function ParcelsTable() {
   const [emailFilter, setEmailFilter] = useState("");
   const [trackingFilter, setTrackingFilter] = useState("");
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
+
+  const STATUS_OPTIONS = useMemo(
+    () =>
+      Object.entries(t("parcels.statuses", { returnObjects: true }) as Record<string, string>).map(
+        ([value, label]) => ({
+          value,
+          label,
+        })
+      ),
+    [t]
+  );
 
   const loadData = async () => {
     setLoading(true);
@@ -71,10 +75,10 @@ export default function ParcelsTable() {
       const values = await form.validateFields();
       if (editingParcel) {
         await api.patch(`/api/parcels/${editingParcel.id}`, values);
-        message.success("Посылка обновлена");
+        message.success(t("parcels.updated"));
       } else {
         await api.post("/api/parcels", values);
-        message.success("Посылка создана");
+        message.success(t("parcels.created"));
       }
       setIsModalOpen(false);
       await loadData();
@@ -85,7 +89,7 @@ export default function ParcelsTable() {
 
   const handleDelete = async (id: number) => {
     await api.delete(`/api/parcels/${id}`);
-    message.success("Посылка удалена");
+    message.success(t("parcels.deleted"));
     await loadData();
   };
 
@@ -93,14 +97,14 @@ export default function ParcelsTable() {
     <div style={{ padding: 16 }}>
       <Space style={{ marginBottom: 16, flexWrap: "wrap" }} align="center">
         <Input
-          placeholder="Поиск по email"
+          placeholder={t("parcels.filters.search_email")}
           value={emailFilter}
           onChange={e => setEmailFilter(e.target.value)}
           style={{ width: 200 }}
           allowClear
         />
         <Input
-          placeholder="Поиск по трек-коду"
+          placeholder={t("parcels.filters.search_tracking")}
           value={trackingFilter}
           onChange={e => setTrackingFilter(e.target.value)}
           style={{ width: 200 }}
@@ -108,7 +112,7 @@ export default function ParcelsTable() {
         />
         <RangePicker onChange={dates => setDateRange(dates as [Dayjs, Dayjs] | null)} />
         <Button icon={<ReloadOutlined />} onClick={loadData}>
-          Обновить
+          {t("parcels.update")}
         </Button>
         <Button
           type="primary"
@@ -119,7 +123,7 @@ export default function ParcelsTable() {
             setIsModalOpen(true);
           }}
         >
-          Создать посылку
+          {t("parcels.create")}
         </Button>
       </Space>
 
@@ -131,25 +135,11 @@ export default function ParcelsTable() {
         pagination={{ pageSize: 10, showSizeChanger: true }}
         style={{ minHeight: 400 }}
         columns={[
+          { title: t("parcels.tracking_code"), dataIndex: "trackingCode" },
+          { title: t("parcels.owner"), dataIndex: ["user", "email"], render: v => v || "—" },
+          { title: t("parcels.warehouse"), dataIndex: ["warehouse", "name"], render: v => v || "—" },
           {
-            title: "Трек-код",
-            dataIndex: "trackingCode",
-            responsive: ["xs", "sm", "md", "lg"],
-          },
-          {
-            title: "Владелец",
-            dataIndex: ["user", "email"],
-            render: v => v || "—",
-            responsive: ["md"],
-          },
-          {
-            title: "Склад",
-            dataIndex: ["warehouse", "name"],
-            render: v => v || "—",
-            responsive: ["lg"],
-          },
-          {
-            title: "Статус",
+            title: t("parcels.status"),
             dataIndex: "status",
             render: (status, record) => (
               <Select
@@ -157,28 +147,24 @@ export default function ParcelsTable() {
                 style={{ width: 220 }}
                 options={STATUS_OPTIONS}
                 onChange={async value => {
-                  await api.patch(`/api/parcels/${record.id}/status`, {
-                    status: value,
-                  });
-                  message.success("Статус обновлён");
+                  await api.patch(`/api/parcels/${record.id}/status`, { status: value });
+                  message.success(t("parcels.updated"));
                   await loadData();
                 }}
               />
             ),
-            responsive: ["sm", "md", "lg"],
           },
           {
-            title: "Создано",
+            title: t("parcels.created_at"),
             dataIndex: "createdAt",
             render: v => (v ? dayjs(v).format("YYYY-MM-DD HH:mm") : "—"),
-            responsive: ["md"],
           },
           {
-            title: "Действия",
+            title: t("parcels.actions"),
             fixed: "right",
             render: (_, record) => (
               <Space>
-                <Tooltip title="Редактировать">
+                <Tooltip title={t("parcels.edit")}>
                   <Button
                     type="link"
                     icon={<EditOutlined />}
@@ -189,7 +175,7 @@ export default function ParcelsTable() {
                     }}
                   />
                 </Tooltip>
-                <Popconfirm title="Удалить посылку?" onConfirm={() => handleDelete(record.id)}>
+                <Popconfirm title={t("parcels.delete")} onConfirm={() => handleDelete(record.id)}>
                   <Button type="link" danger icon={<DeleteOutlined />} />
                 </Popconfirm>
               </Space>
@@ -199,17 +185,23 @@ export default function ParcelsTable() {
       />
 
       <Modal
-        title={editingParcel ? "Редактировать посылку" : "Создать посылку"}
+        title={editingParcel ? t("parcels.edit") : t("parcels.create")}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={handleSave}
-        okText="Сохранить"
+        okText={t("parcels.save", { defaultValue: "Сохранить" })}
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="trackingCode" label="Трек-код" rules={[{ required: true, message: "Введите трек-код" }]}>
+          <Form.Item
+            name="trackingCode"
+            label={t("parcels.tracking_code")}
+            rules={[
+              { required: true, message: t("parcels.enter_tracking_code", { defaultValue: "Введите трек-код" }) },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="status" label="Статус" initialValue="AWAITING_AT_WAREHOUSE">
+          <Form.Item name="status" label={t("parcels.status")} initialValue="AWAITING_AT_WAREHOUSE">
             <Select options={STATUS_OPTIONS} />
           </Form.Item>
         </Form>

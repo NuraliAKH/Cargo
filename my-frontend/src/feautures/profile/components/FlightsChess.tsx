@@ -1,7 +1,7 @@
-// FlightsSimple.tsx
 import React, { useEffect, useState } from "react";
 import { Card, List, Tag, Button, Spin, Typography } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 import api from "../../../api";
 
 const { Text } = Typography;
@@ -16,8 +16,8 @@ type Flight = {
   arrivalAt: string; // ISO
 };
 
-const CHESS_COLOR_A = "#f0f5ff"; // light blue
-const CHESS_COLOR_B = "#fff7e6"; // light warm
+const CHESS_COLOR_A = "#f0f5ff";
+const CHESS_COLOR_B = "#fff7e6";
 
 function formatTZ(dateIso: string, timeZone: string) {
   try {
@@ -36,6 +36,7 @@ function formatTZ(dateIso: string, timeZone: string) {
 }
 
 export default function FlightsList() {
+  const { t } = useTranslation();
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -57,10 +58,10 @@ export default function FlightsList() {
 
   return (
     <Card
-      title="Рейсы"
+      title={t("flights.title")}
       extra={
         <Button icon={<SyncOutlined />} onClick={load} loading={loading}>
-          Обновить
+          {t("flights.refresh")}
         </Button>
       }
     >
@@ -73,8 +74,8 @@ export default function FlightsList() {
           dataSource={flights}
           renderItem={(item, idx) => {
             const bg = idx % 2 === 0 ? CHESS_COLOR_A : CHESS_COLOR_B;
-            const depCH = formatTZ(item.departureAt, "Asia/Tashkent");
-            const depUZ = formatTZ(item.arrivalAt, "Asia/Tashkent");
+            const dep = formatTZ(item.departureAt, "Asia/Tashkent");
+            const arr = formatTZ(item.arrivalAt, "Asia/Tashkent");
 
             return (
               <List.Item
@@ -92,10 +93,10 @@ export default function FlightsList() {
                 <div>
                   <Text strong>{item.departureFrom}</Text> → <Text strong>{item.arrivalTo}</Text>
                   <Text style={{ marginLeft: 12, color: "#666" }}>
-                    ({depCH} — {depUZ})
+                    ({dep} — {arr})
                   </Text>
                 </div>
-                <Tag color="blue">{item.status}</Tag>
+                <Tag color="blue">{item.status || t("flights.noStatus")}</Tag>
               </List.Item>
             );
           }}

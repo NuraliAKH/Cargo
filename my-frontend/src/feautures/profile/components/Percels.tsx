@@ -3,20 +3,13 @@ import api from "../../../api";
 import { Button, Card, List, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
 import AddParcelModal from "./AddParcelModal";
 import { FilterOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
 
-const STATUS_LABELS: Record<string, string> = {
-  AWAITING_AT_WAREHOUSE: "Ожидается на складе",
-  AT_WAREHOUSE: "На складе",
-  IN_TRANSIT: "В пути",
-  AT_LOCAL_WAREHOUSE: "В местном складе",
-  WITH_COURIER: "У курьера",
-  DELIVERED: "Доставлено",
-};
-
 export function Parcels() {
+  const { t } = useTranslation();
   const [items, setItems] = useState<any[]>([]);
   const [filter, setFilter] = useState<string | undefined>(undefined);
   const [openAdd, setOpenAdd] = useState(false);
@@ -32,10 +25,10 @@ export function Parcels() {
   const onDelete = async (id: number) => {
     try {
       await api.delete(`/api/parcels/${id}`);
-      message.success("Посылка удалена");
+      message.success(t("parcels.deleteSuccess"));
       load();
     } catch {
-      message.error("Не удалось удалить посылку");
+      message.error(t("parcels.deleteError"));
     }
   };
 
@@ -53,24 +46,17 @@ export function Parcels() {
       {screens.xs ? (
         <>
           <Button icon={<FilterOutlined />} onClick={() => setShowFilters(prev => !prev)} block>
-            {showFilters ? "Скрыть фильтры" : "Фильтры"}
+            {showFilters ? t("parcels.hideFilters") : t("parcels.showFilters")}
           </Button>
 
           {showFilters && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-                width: "100%",
-              }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
               <Segmented
                 size="small"
                 block
                 options={[
-                  { label: "Все", value: "ALL" },
-                  ...Object.entries(STATUS_LABELS).map(([key, label]) => ({
+                  { label: t("parcels.all"), value: "ALL" },
+                  ...Object.entries(t("parcels.statuses", { returnObjects: true })).map(([key, label]) => ({
                     label,
                     value: key,
                   })),
@@ -81,7 +67,7 @@ export function Parcels() {
           )}
 
           <Button type="primary" onClick={() => setOpenAdd(true)} block>
-            Добавить
+            {t("parcels.add")}
           </Button>
         </>
       ) : (
@@ -89,8 +75,8 @@ export function Parcels() {
           <Segmented
             size="middle"
             options={[
-              { label: "Все", value: "ALL" },
-              ...Object.entries(STATUS_LABELS).map(([key, label]) => ({
+              { label: t("parcels.all"), value: "ALL" },
+              ...Object.entries(t("parcels.statuses", { returnObjects: true })).map(([key, label]) => ({
                 label,
                 value: key,
               })),
@@ -98,7 +84,7 @@ export function Parcels() {
             onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
           />
           <Button type="primary" onClick={() => setOpenAdd(true)}>
-            Добавить
+            {t("parcels.add")}
           </Button>
         </Space>
       )}
@@ -107,12 +93,9 @@ export function Parcels() {
 
   return (
     <Card
-      title="Мои посылки"
+      title={t("parcels.title")}
       extra={headerContent}
-      style={{
-        borderRadius: 12,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-      }}
+      style={{ borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
     >
       <List
         dataSource={filtered}
@@ -140,16 +123,17 @@ export function Parcels() {
                 <Text strong>{p.trackCode}</Text> — {p.description}
                 <div style={{ marginTop: 8 }}>
                   <div>
-                    <Text type="secondary">Цена:</Text> {p.price} $
+                    <Text type="secondary">{t("parcels.price")}:</Text> {p.price} $
                   </div>
                   {p.recipient && (
                     <div>
-                      <Text type="secondary">Получатель:</Text> {`${p.recipient.lastName} ${p.recipient.firstName}`}
+                      <Text type="secondary">{t("parcels.recipient")}:</Text>{" "}
+                      {`${p.recipient.lastName} ${p.recipient.firstName}`}
                     </div>
                   )}
                   {p.flight && (
                     <div>
-                      <Text type="secondary">Рейс:</Text> {p.flight.code ?? "Не назначен"}
+                      <Text type="secondary">{t("parcels.flight")}:</Text> {p.flight.code ?? t("parcels.noFlight")}
                     </div>
                   )}
                 </div>
@@ -162,11 +146,16 @@ export function Parcels() {
                   alignItems: screens.xs ? "flex-start" : "flex-end",
                 }}
               >
-                <Tag color="blue">{STATUS_LABELS[p.status] ?? p.status}</Tag>
+                <Tag color="blue">{t(`parcels.statuses.${p.status}`, { defaultValue: p.status }) as string}</Tag>
                 {canDelete && (
-                  <Popconfirm title="Удалить посылку?" okText="Да" cancelText="Нет" onConfirm={() => onDelete(id)}>
+                  <Popconfirm
+                    title={t("parcels.confirmDelete")}
+                    okText={t("parcels.yes")}
+                    cancelText={t("parcels.no")}
+                    onConfirm={() => onDelete(id)}
+                  >
                     <Button danger size="small">
-                      Удалить
+                      {t("parcels.delete")}
                     </Button>
                   </Popconfirm>
                 )}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal, Form, Input, Select, Space, Popconfirm, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
@@ -24,6 +25,7 @@ interface Recipient {
 }
 
 const RecipientTable: React.FC = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState<Recipient[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -46,10 +48,10 @@ const RecipientTable: React.FC = () => {
       const values = await form.validateFields();
       if (editing) {
         await axios.put(`/api/recipients/${editing.id}`, values);
-        message.success("Recipient updated");
+        message.success(t("recipients.updateSuccess"));
       } else {
         await axios.post(`/api/recipients`, values);
-        message.success("Recipient created");
+        message.success(t("recipients.createSuccess"));
       }
       setOpen(false);
       setEditing(null);
@@ -62,31 +64,21 @@ const RecipientTable: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     await axios.delete(`/api/recipients/${id}`);
-    message.success("Recipient deleted");
+    message.success(t("recipients.deleteSuccess"));
     fetchData();
-  };
-
-  const handlePassportBlur = async () => {
-    const series = form.getFieldValue("passportSeries");
-    const number = form.getFieldValue("passportNumber");
-    if (series && number) {
-      // TODO: Bu yerda API orqali ism va familiyani olish
-      // const res = await axios.get(`/api/passport-info?series=${series}&number=${number}`);
-      // form.setFieldsValue({ firstName: res.data.firstName, lastName: res.data.lastName });
-    }
   };
 
   const columns: ColumnsType<Recipient> = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Type", dataIndex: "type", key: "type" },
-    { title: "First Name", dataIndex: "firstName", key: "firstName" },
-    { title: "Last Name", dataIndex: "lastName", key: "lastName" },
+    { title: t("recipients.type"), dataIndex: "type", key: "type" },
+    { title: t("recipients.firstName"), dataIndex: "firstName", key: "firstName" },
+    { title: t("recipients.lastName"), dataIndex: "lastName", key: "lastName" },
     { title: "JSHSHIR", dataIndex: "jshshir", key: "jshshir" },
-    { title: "Phone", dataIndex: "phone", key: "phone" },
-    { title: "City", dataIndex: "city", key: "city" },
-    { title: "Country", dataIndex: "country", key: "country" },
+    { title: t("recipients.phone"), dataIndex: "phone", key: "phone" },
+    { title: t("recipients.city"), dataIndex: "city", key: "city" },
+    { title: t("recipients.country"), dataIndex: "country", key: "country" },
     {
-      title: "Actions",
+      title: t("recipients.actions"),
       key: "actions",
       render: (_, record) => (
         <Space>
@@ -98,11 +90,16 @@ const RecipientTable: React.FC = () => {
               form.setFieldsValue(record);
             }}
           >
-            Edit
+            {t("recipients.edit")}
           </Button>
-          <Popconfirm title="Delete this recipient?" onConfirm={() => handleDelete(record.id)}>
+          <Popconfirm
+            title={t("recipients.confirmDelete")}
+            onConfirm={() => handleDelete(record.id)}
+            okText={t("recipients.yes")}
+            cancelText={t("recipients.no")}
+          >
             <Button type="link" danger>
-              Delete
+              {t("recipients.delete")}
             </Button>
           </Popconfirm>
         </Space>
@@ -113,12 +110,12 @@ const RecipientTable: React.FC = () => {
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)} style={{ marginBottom: 16 }}>
-        Add Recipient
+        {t("recipients.add")}
       </Button>
       <Table columns={columns} dataSource={data} rowKey="id" loading={loading} scroll={{ x: true }} />
 
       <Modal
-        title={editing ? "Edit Recipient" : "Create Recipient"}
+        title={editing ? t("recipients.editTitle") : t("recipients.createTitle")}
         open={open}
         onCancel={() => {
           setOpen(false);
@@ -128,40 +125,40 @@ const RecipientTable: React.FC = () => {
         onOk={handleCreateOrUpdate}
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="type" label="Type" rules={[{ required: true }]}>
+          <Form.Item name="type" label={t("recipients.type")} rules={[{ required: true }]}>
             <Select>
-              <Option value="INDIVIDUAL">Individual</Option>
-              <Option value="COMPANY">Company</Option>
+              <Option value="INDIVIDUAL">{t("recipients.individual")}</Option>
+              <Option value="COMPANY">{t("recipients.company")}</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="passportSeries" label="Passport Series" rules={[{ required: true }]}>
-            <Input onBlur={handlePassportBlur} />
-          </Form.Item>
-          <Form.Item name="passportNumber" label="Passport Number" rules={[{ required: true }]}>
-            <Input onBlur={handlePassportBlur} />
-          </Form.Item>
-          <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
+          <Form.Item name="passportSeries" label={t("recipients.passportSeries")} rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
+          <Form.Item name="passportNumber" label={t("recipients.passportNumber")} rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="middleName" label="Middle Name">
+          <Form.Item name="firstName" label={t("recipients.firstName")} rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="lastName" label={t("recipients.lastName")} rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="middleName" label={t("recipients.middleName")}>
             <Input />
           </Form.Item>
           <Form.Item name="jshshir" label="JSHSHIR" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="phone" label="Phone">
+          <Form.Item name="phone" label={t("recipients.phone")}>
             <Input />
           </Form.Item>
-          <Form.Item name="addressLine1" label="Address">
+          <Form.Item name="addressLine1" label={t("recipients.address")}>
             <Input />
           </Form.Item>
-          <Form.Item name="city" label="City">
+          <Form.Item name="city" label={t("recipients.city")}>
             <Input />
           </Form.Item>
-          <Form.Item name="country" label="Country">
+          <Form.Item name="country" label={t("recipients.country")}>
             <Input />
           </Form.Item>
         </Form>
