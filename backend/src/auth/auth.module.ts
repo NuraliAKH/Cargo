@@ -4,6 +4,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { PrismaService } from "../prisma.service";
+import { SmsService } from "src/sms/sms.service";
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { PrismaService } from "../prisma.service";
       signOptions: { expiresIn: "7d" },
     }),
   ],
-  providers: [AuthService, PrismaService],
+  providers: [AuthService, PrismaService, SmsService],
   controllers: [AuthController],
   exports: [JwtModule, AuthService],
 })

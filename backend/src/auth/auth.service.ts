@@ -3,22 +3,36 @@ import { PrismaService } from "../prisma.service";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 import { Cron } from "@nestjs/schedule";
+import { SmsService } from "src/sms/sms.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService
+    private jwt: JwtService,
+    private sms: SmsService
   ) {}
 
-  // РЕГИСТРАЦИЯ: создает юзера и отправляет SMS
+  // РЕГИСТРАЦИЯ: создает юзера, если не существует, или повторно отправляет код
   async register(dto: { phone: string; password: string; name: string }) {
-    const exists = await this.prisma.user.findUnique({ where: { phone: dto.phone } });
-    if (exists) throw new BadRequestException("Phone already registered");
+    const existing = await this.prisma.user.findUnique({ where: { phone: dto.phone } });
+
+    if (existing) {
+      if (!existing.isVerified) {
+        // Пользователь есть, но не верифицирован → просто пересылаем код
+        return this.sendVerificationCode(dto.phone);
+      }
+      throw new BadRequestException("Phone already registered");
+    }
 
     const hashed = await bcrypt.hash(dto.password, 10);
     await this.prisma.user.create({
-      data: { phone: dto.phone, password: hashed, name: dto.name, isVerified: false },
+      data: {
+        phone: dto.phone,
+        password: hashed,
+        name: dto.name,
+        isVerified: false,
+      },
     });
 
     return this.sendVerificationCode(dto.phone);
@@ -31,22 +45,6 @@ export class AuthService {
     if (user.isVerified) throw new BadRequestException("Already verified");
 
     return this.sendVerificationCode(phone);
-  }
-
-  // ОТПРАВКА КОДА (общая функция)
-  private async sendVerificationCode(phone: string) {
-    const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6 цифр
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 минут
-
-    // Сначала удаляем старые коды
-    await this.prisma.verificationCode.deleteMany({ where: { phone } });
-
-    await this.prisma.verificationCode.create({
-      data: { phone, code, expiresAt },
-    });
-
-    // await sendSMS(phone, `Ваш код подтверждения: ${code}`);
-    return { message: "Verification code sent" };
   }
 
   // ПОДТВЕРЖДЕНИЕ КОДА
@@ -94,8 +92,35 @@ export class AuthService {
       select: { id: true, phone: true, name: true, role: true, isVerified: true, createdAt: true },
     });
   }
-  // CRON: автоудаление просроченных кодов
-  @Cron("*/5 * * * *") // каждые 5 минут
+
+  async sendVerificationCode(phone: string) {
+    // Генерируем 6-значный код
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 минут
+
+    // Удаляем старые коды для этого номера
+    await this.prisma.verificationCode.deleteMany({ where: { phone } });
+
+    // Сохраняем новый код
+    await this.prisma.verificationCode.create({
+      data: { phone, code, expiresAt },
+    });
+
+    // Формируем двухъязычное SMS
+    const message = `AirExpress platformasida ro'yxatdan o'tish uchun kod: ${code}`;
+
+    // Отправляем SMS
+    try {
+      await this.sms.sendSms(phone, message);
+      return { message: "Код подтверждения отправлен" };
+    } catch (error) {
+      console.error("Ошибка отправки SMS:", error);
+      throw new Error("Не удалось отправить SMS");
+    }
+  }
+
+  // CRON: автоудаление просроченных кодов (каждую минуту)
+  @Cron("* * * * *")
   async cleanExpiredCodes() {
     await this.prisma.verificationCode.deleteMany({
       where: { expiresAt: { lt: new Date() } },

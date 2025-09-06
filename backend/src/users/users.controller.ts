@@ -13,7 +13,7 @@ export class UsersController {
     const token = auth?.split(" ")[1];
     const p: any = token ? this.jwt.verify(token, { secret: process.env.JWT_SECRET || "secret" }) : null;
     if (p?.role !== "ADMIN") throw new Error("Forbidden");
-    return this.prisma.user.findMany({ select: { id: true, email: true, name: true, role: true } });
+    return this.prisma.user.findMany({ select: { id: true, phone: true, name: true, role: true } });
   }
 
   @Patch(":id/role")
@@ -29,7 +29,7 @@ export class UsersController {
     return this.prisma.user.update({
       where: { id: Number(id) },
       data: { role: role as any },
-      select: { id: true, email: true, role: true },
+      select: { id: true, phone: true, role: true },
     });
   }
 }

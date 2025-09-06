@@ -9,44 +9,33 @@ export class AuthController {
     private readonly jwt: JwtService
   ) {}
 
-  /**
-   * Регистрация пользователя (отправка СМС-кода)
-   */
-  @Post("register")
-  async register(@Body() body: { phone: string; password: string; name: string }) {
-    // Создаёт пользователя (не активирован) и отправляет код
-    await this.auth.register(body);
-    return { message: "Код подтверждения отправлен" };
+  @Post("request-code")
+  requestCode(@Body() body: { phone: string }) {
+    return this.auth.sendVerificationCode(body.phone);
   }
 
-  /**
-   * Подтверждение телефона и завершение регистрации
-   */
   @Post("verify")
-  async verify(@Body() body: { phone: string; code: string }) {
-    const token = await this.auth.verifyCode(body.phone, body.code);
-    if (!token) throw new UnauthorizedException("Неверный код");
-    return { access_token: token };
+  verifyCode(@Body() body: { phone: string; code: string }) {
+    return this.auth.verifyCode(body.phone, body.code);
+  }
+  @Post("register")
+  register(@Body() body: { phone: string; password: string; name: string }) {
+    return this.auth.register(body);
   }
 
-  /**
-   * Логин (только для подтверждённых пользователей)
-   */
+  // 4. Логин (без кода)
   @Post("login")
-  async login(@Body() body: { phone: string; password: string }) {
+  login(@Body() body: { phone: string; password: string }) {
     return this.auth.login(body);
   }
 
-  /**
-   * Получить текущего пользователя
-   */
   @Get("me")
-  async me(@Headers("authorization") authHeader?: string) {
-    if (!authHeader) throw new UnauthorizedException("Нет токена");
-    const token = authHeader.split(" ")[1];
-    if (!token) throw new UnauthorizedException("Некорректный токен");
-
-    const payload = this.jwt.verify(token, { secret: process.env.JWT_SECRET || "secret" });
-    return this.auth.me(payload.sub);
+  me(@Headers("authorization") authHeader?: string) {
+    const token = authHeader?.split(" ")[1];
+    if (!token) return null;
+    const payload = this.jwt.verify(token, {
+      secret: process.env.JWT_SECRET || "secret",
+    });
+    return this.auth.me(payload["sub"]);
   }
 }
