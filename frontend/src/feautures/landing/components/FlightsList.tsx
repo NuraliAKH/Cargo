@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, List, Tag, Button, Spin, Typography, Space } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 import api from "../../../api";
 
 const { Text } = Typography;
@@ -9,14 +10,14 @@ type Flight = {
   id: number;
   code?: string | null;
   status?: string;
-  departureAt: string; // ISO
+  departureAt: string;
   departureFrom: string;
   arrivalTo: string;
-  arrivalAt: string; // ISO
+  arrivalAt: string;
 };
 
-const CHESS_COLOR_A = "#f0f5ff"; // light blue
-const CHESS_COLOR_B = "#fff7e6"; // light warm
+const CHESS_COLOR_A = "#f0f5ff";
+const CHESS_COLOR_B = "#fff7e6";
 
 function formatTZ(dateIso: string, timeZone: string) {
   try {
@@ -35,6 +36,7 @@ function formatTZ(dateIso: string, timeZone: string) {
 }
 
 export default function FlightsList() {
+  const { t } = useTranslation();
   const [flights, setFlights] = useState<Flight[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -65,25 +67,25 @@ export default function FlightsList() {
         }}
       >
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Рейсы
+          {t("flights")}
         </Typography.Title>
         <Button icon={<SyncOutlined />} onClick={load} loading={loading}>
-          Обновить
+          {t("refresh")}
         </Button>
       </Space>
 
       <Card>
         {loading ? (
           <div style={{ textAlign: "center", padding: 30 }}>
-            <Spin />
+            <Spin tip={t("loading")} />
           </div>
         ) : (
           <List
             dataSource={flights}
             renderItem={(item, idx) => {
               const bg = idx % 2 === 0 ? CHESS_COLOR_A : CHESS_COLOR_B;
-              const depCH = formatTZ(item.departureAt, "Asia/Tashkent");
-              const depUZ = formatTZ(item.arrivalAt, "Asia/Tashkent");
+              const depTime = formatTZ(item.departureAt, "Asia/Tashkent");
+              const arrTime = formatTZ(item.arrivalAt, "Asia/Tashkent");
 
               return (
                 <List.Item
@@ -101,10 +103,10 @@ export default function FlightsList() {
                   <div>
                     <Text strong>{item.departureFrom}</Text> → <Text strong>{item.arrivalTo}</Text>
                     <Text style={{ marginLeft: 12, color: "#666" }}>
-                      ({depCH} — {depUZ})
+                      ({depTime} — {arrTime})
                     </Text>
                   </div>
-                  <Tag color="blue">{item.status}</Tag>
+                  <Tag color="blue">{t(`status.${item.status || "scheduled"}`)}</Tag>
                 </List.Item>
               );
             }}

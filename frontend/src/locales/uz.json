@@ -1,0 +1,73 @@
+{
+  "home": "Bosh sahifa",
+  "flights": "Reyslar",
+  "login": "Kirish",
+  "register": "Ro‘yxatdan o‘tish",
+  "logout": "Chiqish",
+  "menu": "Menyu",
+  "navigation": "Navigatsiya",
+  "refresh": "Yangilash",
+  "loading": "Yuklanmoqda",
+  "from": "dan",
+  "to": "gacha",
+  "status": {
+    "scheduled": "Rejalashtirilgan",
+    "delayed": "Kechikkan",
+    "departed": "Jo'nagan",
+    "arrived": "Kelgan",
+    "cancelled": "Bekor qilingan"
+  },
+  "footer": {
+    "rights": "Barcha huquqlar himoyalangan.",
+    "contacts": "Aloqa",
+    "social": "Ijtimoiy tarmoqlarda biz"
+  },
+  "hero": {
+    "title": "Tez va ishonchli kargo yetkazib berish",
+    "subtitle": "Posilkalarni kuzatib boring, manzillarni boshqaring va bildirishnomalarni oling.",
+    "login": "Kirish",
+    "register": "Ro‘yxatdan o‘tish"
+  },
+  "howItWorks": {
+    "title": "Bu qanday ishlaydi?",
+    "subtitle": "Xitoydan buyurtma olish uchun to'rt oddiy qadamni bajaring",
+    "steps": [
+      {
+        "title": "1. Ro'yxatdan o'ting",
+        "description": "Saytda ro'yxatdan o'ting va shaxsiy manzilni oling. Bu 1 daqiqa vaqt oladi.",
+        "link": "Shaxsiy manzil olish"
+      },
+      {
+        "title": "2. Onlayn xarid qiling",
+        "description": "Xitoydagi internet-do'konlardan tovar buyurtma qiling va berilgan manzilni kiriting.",
+        "link": "Mashhur do'konlar"
+      },
+      {
+        "title": "3. Xaridni ro'yxatdan o'tkazing",
+        "description": "Xaridni shaxsiy kabinetda ro'yxatdan o'tkazing va yetkazib berish uchun to'lovni amalga oshiring.",
+        "link": "Yetkazib berish haqida"
+      },
+      {
+        "title": "4. Qabul qiling",
+        "description": "Yetkazib berish yuborilgan kundan boshlab 7 kun davom etadi. Statusni kuzating."
+      }
+    ]
+  },
+  "services": {
+    "title": "Xizmatlar",
+    "items": [
+      {
+        "name": "Aviatsiya",
+        "description": "Havo transporti orqali tezkor yetkazib berish."
+      },
+      {
+        "name": "Avto",
+        "description": "Quruqlik orqali ishonchli tashish."
+      },
+      {
+        "name": "Poyezd",
+        "description": "Yirik yuklar uchun optimal variant."
+      }
+    ]
+  }
+}

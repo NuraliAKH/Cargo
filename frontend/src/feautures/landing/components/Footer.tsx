@@ -1,22 +1,27 @@
 import { Layout, Row, Col, Typography, Space } from "antd";
 import { MailOutlined, PhoneOutlined, InstagramOutlined, FacebookFilled, SendOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Footer } = Layout;
 const { Text, Title, Link } = Typography;
 
 export default function AppFooter() {
+  const { t } = useTranslation();
+
   return (
-    <Footer style={{ borderTop: 1, padding: "40px 20px" }}>
+    <Footer style={{ borderTop: "1px solid #e8e8e8", padding: "40px 20px" }}>
       <Row gutter={[32, 32]} justify="space-between" align="top">
         {/* Логотип и копирайт */}
         <Col xs={24} md={8} style={{ textAlign: "center", textAlignLast: "left" }}>
           <img src="/logo.png" alt="Airexpress Logo" style={{ width: 120, marginBottom: 16 }} />
-          <Text>© {new Date().getFullYear()} Airexpress. Все права защищены.</Text>
+          <Text>
+            © {new Date().getFullYear()} Airexpress. {t("footer.rights")}
+          </Text>
         </Col>
 
         {/* Контакты */}
         <Col xs={24} sm={12} md={8} style={{ textAlign: "center", textAlignLast: "left" }}>
-          <Title level={5}>Контакты</Title>
+          <Title level={5}>{t("footer.contacts")}</Title>
           <Space direction="vertical">
             <Text>
               <MailOutlined /> info@airexpress.uz
@@ -29,7 +34,7 @@ export default function AppFooter() {
 
         {/* Соцсети */}
         <Col xs={24} sm={12} md={8} style={{ textAlign: "center", textAlignLast: "left" }}>
-          <Title level={5}>Мы в соцсетях</Title>
+          <Title level={5}>{t("footer.social")}</Title>
           <Space size="large">
             <Link href="https://t.me/airexpressuz" target="_blank">
               <SendOutlined style={{ fontSize: 22, color: "#08c" }} />

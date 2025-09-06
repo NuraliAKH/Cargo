@@ -1,20 +1,23 @@
 // components/HeroSection.tsx
 import { Link } from "react-router-dom";
 import { Button, Typography } from "antd";
-import "./HeroSection.css"; // Стили вынесем отдельно
+import { useTranslation } from "react-i18next";
+import "./HeroSection.css";
 
 const HeroSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section id="main" className="hero-section">
       <div className="content">
-        <Typography.Title>Быстрая и надёжная карго-доставка</Typography.Title>
-        <Typography.Paragraph>Отслеживайте посылки, управляйте адресами и получайте уведомления.</Typography.Paragraph>
+        <Typography.Title>{t("hero.title")}</Typography.Title>
+        <Typography.Paragraph>{t("hero.subtitle")}</Typography.Paragraph>
         <div className="actions">
           <Link to="/auth?tab=login">
-            <Button type="primary">Войти</Button>
+            <Button type="primary">{t("hero.login")}</Button>
           </Link>
           <Link to="/auth?tab=register">
-            <Button>Зарегистрироваться</Button>
+            <Button>{t("hero.register")}</Button>
           </Link>
         </div>
       </div>

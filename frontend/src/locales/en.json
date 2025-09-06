@@ -1,0 +1,73 @@
+{
+  "home": "Home",
+  "flights": "Flights",
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+  "menu": "Menu",
+  "navigation": "Navigation",
+  "refresh": "Refresh",
+  "loading": "Loading",
+  "from": "from",
+  "to": "to",
+  "status": {
+    "scheduled": "Scheduled",
+    "delayed": "Delayed",
+    "departed": "Departed",
+    "arrived": "Arrived",
+    "cancelled": "Cancelled"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "contacts": "Contacts",
+    "social": "Follow us on"
+  },
+  "hero": {
+    "title": "Fast and reliable cargo delivery",
+    "subtitle": "Track packages, manage addresses, and get notifications.",
+    "login": "Login",
+    "register": "Sign Up"
+  },
+  "howItWorks": {
+    "title": "How does it work?",
+    "subtitle": "Follow four simple steps to receive your purchase from China",
+    "steps": [
+      {
+        "title": "1. Register",
+        "description": "Register on the website to get your personal address in China. It takes 1 minute.",
+        "link": "Get personal address"
+      },
+      {
+        "title": "2. Shop online",
+        "description": "Order products from Chinese online stores and use the provided address.",
+        "link": "Popular stores"
+      },
+      {
+        "title": "3. Register your purchase",
+        "description": "Register your purchase in your account and pay for delivery online.",
+        "link": "Learn about delivery"
+      },
+      {
+        "title": "4. Receive",
+        "description": "Delivery takes about 7 days after shipping. Track your parcel status."
+      }
+    ]
+  },
+  "services": {
+    "title": "Services",
+    "items": [
+      {
+        "name": "Air",
+        "description": "Fast delivery by air transport."
+      },
+      {
+        "name": "Auto",
+        "description": "Reliable land transportation."
+      },
+      {
+        "name": "Train",
+        "description": "Optimal for oversized cargo."
+      }
+    ]
+  }
+}
