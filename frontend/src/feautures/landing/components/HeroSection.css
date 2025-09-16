@@ -1,6 +1,6 @@
 /* HeroSection.css */
 .hero-section {
-  background-image: url('landing.png'); /* замените на ваш путь */
+  background-image: url('/landing.png'); /* замените на ваш путь */
   background-size: cover;
   background-position: center;
   text-align: center;

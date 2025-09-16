@@ -24,7 +24,7 @@ export default function App() {
   const nav = useNavigate();
   const loadMe = async () => {
     try {
-      const { data } = await api.get("/api/auth/me");
+      const { data } = await api.get("https://api.airexpress.uz/api/auth/me");
       setMe(data);
     } catch {
       setMe(null);

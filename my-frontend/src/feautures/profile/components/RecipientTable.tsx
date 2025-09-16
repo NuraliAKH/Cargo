@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Modal, Form, Input, Select, Space, Popconfirm, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
+import api from "../../../api";
 
 const { Option } = Select;
 
@@ -34,7 +34,7 @@ const RecipientTable: React.FC = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    const res = await axios.get<Recipient[]>("/api/recipients");
+    const res = await api.get<Recipient[]>("/api/recipients");
     setData(res.data);
     setLoading(false);
   };
@@ -47,10 +47,10 @@ const RecipientTable: React.FC = () => {
     try {
       const values = await form.validateFields();
       if (editing) {
-        await axios.put(`/api/recipients/${editing.id}`, values);
+        await api.put(`/api/recipients/${editing.id}`, values);
         message.success(t("recipients.updateSuccess"));
       } else {
-        await axios.post(`/api/recipients`, values);
+        await api.post(`/api/recipients`, values);
         message.success(t("recipients.createSuccess"));
       }
       setOpen(false);
@@ -63,7 +63,7 @@ const RecipientTable: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    await axios.delete(`/api/recipients/${id}`);
+    await api.delete(`/api/recipients/${id}`);
     message.success(t("recipients.deleteSuccess"));
     fetchData();
   };
