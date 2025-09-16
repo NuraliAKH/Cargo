@@ -75,10 +75,10 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="space-x-2">
-                    <Link to="http://localhost:5174/auth?tab=login">
+                    <Link to="https://my.airexpress.uz/auth?tab=login">
                       <Button>{t("login")}</Button>
                     </Link>
-                    <Link to="http://localhost:5174/auth?tab=register">
+                    <Link to="https://my.airexpress.uz/auth?tab=register">
                       <Button type="primary">{t("register")}</Button>
                     </Link>
                   </div>
