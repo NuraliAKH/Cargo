@@ -13,10 +13,10 @@ const HeroSection = () => {
         <Typography.Title>{t("hero.title")}</Typography.Title>
         <Typography.Paragraph>{t("hero.subtitle")}</Typography.Paragraph>
         <div className="actions">
-          <Link to="/auth?tab=login">
+          <Link to="https://my.airexpress.uz/auth?tab=login">
             <Button type="primary">{t("hero.login")}</Button>
           </Link>
-          <Link to="/auth?tab=register">
+          <Link to="https://my.airexpress.uz/auth?tab=register">
             <Button>{t("hero.register")}</Button>
           </Link>
         </div>
