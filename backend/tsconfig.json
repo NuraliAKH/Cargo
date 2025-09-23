@@ -13,6 +13,5 @@
     "incremental": true,
     "strict": true,
     "skipLibCheck": true,
-
   }
 }
