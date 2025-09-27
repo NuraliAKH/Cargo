@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://api.airexpress.uz/",
+  baseURL: "https://my.airexpress.uz/",
 });
 
 api.interceptors.request.use(config => {
