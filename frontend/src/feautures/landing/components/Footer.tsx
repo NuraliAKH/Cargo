@@ -14,9 +14,7 @@ export default function AppFooter() {
         {/* Логотип и копирайт */}
         <Col xs={24} md={8} style={{ textAlign: "center", textAlignLast: "left" }}>
           <img src="/logo.png" alt="Airexpress Logo" style={{ width: 120, marginBottom: 16 }} aria-disabled />
-          <Text>
-            © {new Date().getFullYear()} Airexpress. {t("footer.rights")}
-          </Text>
+          <Text>© 2023-2025 AirExpress. {t("footer.rights")}</Text>
         </Col>
 
         {/* Контакты */}
