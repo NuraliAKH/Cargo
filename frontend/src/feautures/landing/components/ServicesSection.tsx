@@ -13,8 +13,8 @@ export default function ServicesSection() {
 
   const icons = [
     <RocketOutlined style={{ fontSize: 28, color: "#1890ff" }} />,
-    <CarOutlined style={{ fontSize: 28, color: "#52c41a" }} />,
-    <BranchesOutlined style={{ fontSize: 28, color: "#fa8c16" }} />,
+    <CarOutlined style={{ fontSize: 28, color: "#1890ff" }} />,
+    <BranchesOutlined style={{ fontSize: 28, color: "#1890ff" }} />,
   ];
 
   return (

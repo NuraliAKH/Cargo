@@ -69,5 +69,13 @@
         "description": "Optimal for oversized cargo."
       }
     ]
+  },
+  "flights2": {
+    "status": {
+      "SCHEDULED": "Scheduled",
+      "DEPARTED": "Departed",
+      "ARRIVED": "Arrived",
+      "CANCELLED": "Cancelled"
+    }
   }
 }

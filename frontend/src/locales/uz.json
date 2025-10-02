@@ -69,5 +69,13 @@
         "description": "Yirik yuklar uchun optimal variant."
       }
     ]
+  },
+  "flights2": {
+    "status": {
+      "SCHEDULED": "Rejalashtirilgan",
+      "DEPARTED": "Jo‘nab ketdi",
+      "ARRIVED": "Yetib keldi",
+      "CANCELLED": "Bekor qilindi"
+    }
   }
 }

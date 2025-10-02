@@ -17,7 +17,7 @@ type Flight = {
 };
 
 const CHESS_COLOR_A = "#f0f5ff";
-const CHESS_COLOR_B = "#fff7e6";
+const CHESS_COLOR_B = "#d2767dff";
 
 function formatTZ(dateIso: string, timeZone: string) {
   try {

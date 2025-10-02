@@ -153,10 +153,10 @@ export default function FlightsPage() {
           <Form.Item name="status" label={t("flights.form.status")} initialValue="SCHEDULED">
             <Select
               options={[
-                { value: "SCHEDULED", label: t("flights.status.SCHEDULED") },
-                { value: "DEPARTED", label: t("flights.status.DEPARTED") },
-                { value: "ARRIVED", label: t("flights.status.ARRIVED") },
-                { value: "CANCELLED", label: t("flights.status.CANCELLED") },
+                { value: "SCHEDULED", label: t("flights2.status.SCHEDULED") },
+                { value: "DEPARTED", label: t("flights2.status.DEPARTED") },
+                { value: "ARRIVED", label: t("flights2.status.ARRIVED") },
+                { value: "CANCELLED", label: t("flights2.status.CANCELLED") },
               ]}
             />
           </Form.Item>
