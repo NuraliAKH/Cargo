@@ -108,17 +108,6 @@ export default function AddParcelModal({ open, onClose, onCreated }: Props) {
             }))}
           />
         </Form.Item>
-
-        <Form.Item name="flightId" label={t("my-parcels.flight")}>
-          <Select
-            allowClear
-            placeholder={t("my-parcels.select_flight")}
-            options={flights.map((f: any) => ({
-              value: f.id ?? f._id,
-              label: f.code ?? `${t("my-parcels.flight_default")} #${f.id}`,
-            }))}
-          />
-        </Form.Item>
       </Form>
     </Modal>
   );
