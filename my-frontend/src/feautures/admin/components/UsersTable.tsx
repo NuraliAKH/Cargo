@@ -47,7 +47,9 @@ export default function UsersTable() {
         scroll={{ x: true }}
         dataSource={data}
         columns={[
-          { title: t("users.email"), dataIndex: "email" },
+          { title: t("users.phone"), dataIndex: "phone" },
+          { title: t("users.name"), dataIndex: "name" },
+
           {
             title: t("users.role"),
             dataIndex: "role",
