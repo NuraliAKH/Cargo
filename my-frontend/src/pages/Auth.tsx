@@ -117,11 +117,11 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
         >
           <Checkbox>
             Я подтверждаю, что ознакомлен(-на) с{" "}
-            <a href="/offer.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/offer.pdf" target="_blank" rel="noopener noreferrer" color="#2291e3">
               публичной офертой
             </a>{" "}
             и{" "}
-            <a href="/privacy.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/privacy.pdf" target="_blank" rel="noopener noreferrer" color="#2291e3">
               политикой конфиденциальности
             </a>
             , и принимаю их положения.
