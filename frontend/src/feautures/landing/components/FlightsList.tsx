@@ -106,7 +106,7 @@ export default function FlightsList() {
                       ({depTime} — {arrTime})
                     </Text>
                   </div>
-                  <Tag color="blue">{t(`status.${item.status || "scheduled"}`)}</Tag>
+                  <Tag color="blue">{t(`flights2.status.${item.status || "scheduled"}`)}</Tag>
                 </List.Item>
               );
             }}

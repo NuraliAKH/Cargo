@@ -258,5 +258,13 @@
     "zipcode": "Почтовый индекс",
     "telephone": "Телефон",
     "cell": "Мобильный"
+  },
+  "flights2": {
+    "status": {
+      "SCHEDULED": "Запланирован",
+      "DEPARTED": "Вылетел",
+      "ARRIVED": "Прибыл",
+      "CANCELLED": "Отменен"
+    }
   }
 }

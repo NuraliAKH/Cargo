@@ -240,5 +240,13 @@
     "zipcode": "Zip Code",
     "telephone": "Telephone",
     "cell": "Cell"
+  },
+  "flights2": {
+    "status": {
+      "SCHEDULED": "Scheduled",
+      "DEPARTED": "Departed",
+      "ARRIVED": "Arrived",
+      "CANCELLED": "Cancelled"
+    }
   }
 }
