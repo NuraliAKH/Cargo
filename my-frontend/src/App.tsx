@@ -44,7 +44,7 @@ export default function App() {
     <div style={{ backgroundColor: "#f5f5f5" }}>
       <Layout style={{ minHeight: "100vh" }}>
         {/* Отображаем Header только для главной */}
-        {!(pathname.startsWith("/profile") || pathname.startsWith("/admin")) && (
+        {!(pathname.startsWith("/") || pathname.startsWith("/admin")) && (
           <Layout.Header className="flex items-center justify-between" style={{ backgroundColor: "#f5f5f5" }}>
             <Typography.Title level={3} className="!text-black !mb-0">
               <img style={{ height: 50 }} src="/logo.png" alt="Logo" />

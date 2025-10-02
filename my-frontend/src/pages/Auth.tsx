@@ -1,4 +1,4 @@
-import { Tabs, Form, Input, Button, message, Card } from "antd";
+import { Tabs, Form, Input, Button, message, Card, Checkbox } from "antd";
 import api from "../api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -13,7 +13,7 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [registerData, setRegisterData] = useState<{ phone: string; password: string; name: string } | null>(null);
   const [cooldown, setCooldown] = useState(0);
-
+  const [disabled, setDisabled] = useState(false);
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (cooldown > 0) {
@@ -110,6 +110,34 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
         >
           <Input.Password />
         </Form.Item>
+        <Form.Item
+          name="offerAgreement"
+          valuePropName="checked"
+          rules={[{ required: true, message: t("auth.offerRequired") }]}
+        >
+          <Checkbox>
+            Я подтверждаю, что ознакомлен(-на) с{" "}
+            <a href="/offer.pdf" target="_blank" rel="noopener noreferrer">
+              публичной офертой
+            </a>{" "}
+            и{" "}
+            <a href="/privacy.pdf" target="_blank" rel="noopener noreferrer">
+              политикой конфиденциальности
+            </a>
+            , и принимаю их положения.
+          </Checkbox>
+        </Form.Item>
+        <Form.Item
+          name="marketingAgreement"
+          valuePropName="checked"
+          rules={[{ required: true, message: t("auth.marketingRequired") }]}
+        >
+          <Checkbox>
+            Я согласен(-на) получать от AirExpress сообщения средствами электронной связи (email, SMS),
+            персонализированные маркетинговые материалы, включая предложения на основе моих покупательских предпочтений.
+          </Checkbox>
+        </Form.Item>
+
         <Button type="primary" htmlType="submit" className="w-full">
           {t("auth.getCode")}
         </Button>
@@ -124,6 +152,9 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
             {cooldown > 0 ? t("auth.resendCooldown", { seconds: cooldown }) : t("auth.resend")}
           </Button>
         </div>
+
+        {/* Чекбокс 2: маркетинг */}
+
         <Button type="primary" htmlType="submit" className="w-full">
           {t("auth.confirm")}
         </Button>
