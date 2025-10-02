@@ -60,7 +60,7 @@ export default function App() {
         {!(pathname.startsWith("/profile") || pathname.startsWith("/admin")) && (
           <Layout.Header className="flex items-center justify-between" style={{ backgroundColor: "#f5f5f5" }}>
             <Typography.Title level={3} className="!text-black !mb-0">
-              <Image style={{ height: 50 }} src="/logo.png" alt="Logo" />
+              <Image style={{ height: 50 }} src="/logo.png" alt="Logo" aria-disabled />
             </Typography.Title>
             {screens.md ? (
               <div className="flex items-center gap-4">
