@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import api from "../../../api";
 import { Button, Card, List, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
 import AddParcelModal from "./AddParcelModal";
-import { FilterOutlined } from "@ant-design/icons";
+import {
+  CarOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  FilterOutlined,
+  InboxOutlined,
+  ShopOutlined,
+  AppstoreOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
@@ -15,6 +24,29 @@ export function Parcels() {
   const [openAdd, setOpenAdd] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const screens = useBreakpoint();
+
+  const statusIcons: Record<string, { icon: JSX.Element; color: string }> = {
+    AWAITING_AT_WAREHOUSE: { icon: <ClockCircleOutlined />, color: "default" },
+    AT_WAREHOUSE: { icon: <InboxOutlined />, color: "blue" },
+    IN_TRANSIT: { icon: <CarOutlined />, color: "orange" },
+    AT_LOCAL_WAREHOUSE: { icon: <ShopOutlined />, color: "cyan" },
+    WITH_COURIER: { icon: <UserOutlined />, color: "purple" },
+    DELIVERED: { icon: <CheckCircleOutlined />, color: "green" },
+  };
+
+  const statusOptions = [
+    { label: t("parcels.all"), value: "ALL", icon: <AppstoreOutlined /> },
+    {
+      label: t("parcels.statuses.AWAITING_AT_WAREHOUSE"),
+      value: "AWAITING_AT_WAREHOUSE",
+      icon: <ClockCircleOutlined />,
+    },
+    { label: t("parcels.statuses.AT_WAREHOUSE"), value: "AT_WAREHOUSE", icon: <InboxOutlined /> },
+    { label: t("parcels.statuses.IN_TRANSIT"), value: "IN_TRANSIT", icon: <CarOutlined /> },
+    { label: t("parcels.statuses.AT_LOCAL_WAREHOUSE"), value: "AT_LOCAL_WAREHOUSE", icon: <ShopOutlined /> },
+    { label: t("parcels.statuses.WITH_COURIER"), value: "WITH_COURIER", icon: <UserOutlined /> },
+    { label: t("parcels.statuses.DELIVERED"), value: "DELIVERED", icon: <CheckCircleOutlined /> },
+  ];
 
   const load = () => api.get("/api/parcels/my").then(r => setItems(r.data));
 
@@ -52,15 +84,12 @@ export function Parcels() {
           {showFilters && (
             <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
               <Segmented
-                size="small"
-                block
-                options={[
-                  { label: t("parcels.all"), value: "ALL" },
-                  ...Object.entries(t("parcels.statuses", { returnObjects: true })).map(([key, label]) => ({
-                    label,
-                    value: key,
-                  })),
-                ]}
+                size={screens.xs ? "small" : "middle"}
+                block={screens.xs}
+                options={statusOptions.map(o => ({
+                  value: o.value,
+                  label: <Space>{o.icon}</Space>,
+                }))}
                 onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
               />
             </div>
@@ -73,14 +102,12 @@ export function Parcels() {
       ) : (
         <Space>
           <Segmented
-            size="middle"
-            options={[
-              { label: t("parcels.all"), value: "ALL" },
-              ...Object.entries(t("parcels.statuses", { returnObjects: true })).map(([key, label]) => ({
-                label,
-                value: key,
-              })),
-            ]}
+            size={screens.xs ? "small" : "middle"}
+            block={screens.xs}
+            options={statusOptions.map(o => ({
+              value: o.value,
+              label: <Space>{o.icon}</Space>,
+            }))}
             onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
           />
           <Button type="primary" onClick={() => setOpenAdd(true)}>
@@ -146,7 +173,14 @@ export function Parcels() {
                   alignItems: screens.xs ? "flex-start" : "flex-end",
                 }}
               >
-                <Tag color="blue">{t(`parcels.statuses.${p.status}`, { defaultValue: p.status }) as string}</Tag>
+                {(() => {
+                  const s = statusIcons[p.status];
+                  return (
+                    <Tag color={s?.color || "default"} icon={s?.icon}>
+                      {t(`parcels.statuses.${p.status}`, { defaultValue: p.status }) as string}
+                    </Tag>
+                  );
+                })()}
                 {canDelete && (
                   <Popconfirm
                     title={t("parcels.confirmDelete")}
