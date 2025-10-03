@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Modal, Form, Input, DatePicker, Select, Table, message, Popconfirm, Tag } from "antd";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 import api from "../../../api";
 
 const { RangePicker } = DatePicker;
@@ -99,7 +100,10 @@ export default function FlightsPage() {
                 status: record.status,
                 departureFrom: record.departureFrom,
                 arrivalTo: record.arrivalTo,
-                dates: [record.departureAt, record.arrivalAt].filter(Boolean),
+                dates: [
+                  record.departureAt ? dayjs(record.departureAt) : null,
+                  record.arrivalAt ? dayjs(record.arrivalAt) : null,
+                ].filter(Boolean),
               });
               setOpenModal(true);
             }}

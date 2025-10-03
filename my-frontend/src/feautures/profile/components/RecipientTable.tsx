@@ -34,7 +34,7 @@ const RecipientTable: React.FC = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    const res = await api.get<Recipient[]>("/api/recipients");
+    const res = await api.get<Recipient[]>("/api/recipients/my");
     setData(res.data);
     setLoading(false);
   };
