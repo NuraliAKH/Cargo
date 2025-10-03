@@ -13,14 +13,22 @@ import { Parcels } from "../feautures/profile/components/Percels";
 import { Addresses } from "../feautures/profile/components/Adresses";
 import RecipientTable from "../feautures/profile/components/RecipientTable";
 import FlightsList from "../feautures/profile/components/FlightsChess";
+import { Header } from "antd/es/layout/layout";
 
 const { Sider, Content } = Layout;
 const { Option } = Select;
 
-export default function Profile() {
-  const { t } = useTranslation();
+export default function Profile(me: any) {
+  console.log(me);
+
+  const { t, i18n } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("warehouses");
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("lang", lng);
+  };
 
   const renderContent = () => {
     switch (selectedKey) {
@@ -64,6 +72,30 @@ export default function Profile() {
         />
       </Sider>
       <Layout>
+        <Header className="flex items-center justify-end" style={{ backgroundColor: "#f5f5f5", padding: "0 16px" }}>
+          <Space>
+            <Space>
+              {me && (
+                <div className="flex flex-col leading-tight">
+                  <span className="font-medium">{me.me.name}</span>
+                </div>
+              )}
+            </Space>
+            <Space>{me && `ID: ${me.me.id}`}</Space>
+            <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
+              <Select
+                defaultValue={i18n.language}
+                style={{ width: 120 }}
+                onChange={changeLanguage}
+                suffixIcon={<GlobalOutlined />}
+              >
+                <Option value="ru">Русский</Option>
+                <Option value="uz">Oʻzbekcha</Option>
+                <Option value="en">English</Option>
+              </Select>
+            </Space>
+          </Space>
+        </Header>
         <Content style={{ width: "100%" }}>{renderContent()}</Content>
       </Layout>
     </Layout>

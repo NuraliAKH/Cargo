@@ -107,7 +107,7 @@ export default function App() {
               path="/"
               element={
                 <PrivateRoute me={me}>
-                  <Profile />
+                  <Profile me={me} />
                 </PrivateRoute>
               }
             />
