@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../../api";
 import { Button, Card, List, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
 import AddParcelModal from "./AddParcelModal";
+import styled from "@emotion/styled";
 import {
   CarOutlined,
   CheckCircleOutlined,
@@ -16,6 +17,48 @@ import { useTranslation } from "react-i18next";
 
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
+
+const ScrollContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #d9d9d9;
+    border-radius: 10px;
+  }
+`;
+
+const StyledCard = styled(Card)`
+  min-width: 280px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  scroll-snap-align: start;
+`;
+
+interface Parcel {
+  id: string | number;
+  trackCode: string;
+  description: string;
+  price: number;
+  status: string;
+  recipient?: { firstName: string; lastName: string };
+  flight?: { code?: string };
+}
+
+interface Props {
+  parcels: Parcel[];
+  canDelete?: boolean;
+  onDelete: (id: string | number) => void;
+  t: (key: string, params?: any) => string;
+  statusIcons: Record<string, { color: string; icon?: React.ReactNode }>;
+}
 
 export function Parcels() {
   const { t } = useTranslation();
@@ -132,23 +175,10 @@ export function Parcels() {
           const canDelete = p.status === "AWAITING_AT_WAREHOUSE";
 
           return (
-            <Card
-              key={id}
-              style={{
-                marginBottom: 12,
-                borderRadius: 10,
-                border: "1px solid #f0f0f0",
-              }}
-              bodyStyle={{
-                display: "flex",
-                flexDirection: screens.xs ? "column" : "row",
-                justifyContent: "space-between",
-                gap: 12,
-              }}
-            >
+            <StyledCard key={p.id} bodyStyle={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <div>
                 <Text strong>{p.trackCode}</Text> — {p.description}
-                <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 6 }}>
                   <div>
                     <Text type="secondary">{t("parcels.price")}:</Text> {p.price} $
                   </div>
@@ -165,28 +195,18 @@ export function Parcels() {
                   )}
                 </div>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
-                  alignItems: screens.xs ? "flex-start" : "flex-end",
-                }}
-              >
-                {(() => {
-                  const s = statusIcons[p.status];
-                  return (
-                    <Tag color={s?.color || "default"} icon={s?.icon}>
-                      {t(`parcels.statuses.${p.status}`, { defaultValue: p.status }) as string}
-                    </Tag>
-                  );
-                })()}
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
+                <Tag color={p.status?.color || "default"} icon={p.status?.icon}>
+                  {t(`parcels.statuses.${p.status}`, { defaultValue: p.status })}
+                </Tag>
+
                 {canDelete && (
                   <Popconfirm
                     title={t("parcels.confirmDelete")}
                     okText={t("parcels.yes")}
                     cancelText={t("parcels.no")}
-                    onConfirm={() => onDelete(id)}
+                    onConfirm={() => onDelete(p.id)}
                   >
                     <Button danger size="small">
                       {t("parcels.delete")}
@@ -194,7 +214,7 @@ export function Parcels() {
                   </Popconfirm>
                 )}
               </div>
-            </Card>
+            </StyledCard>
           );
         }}
       />

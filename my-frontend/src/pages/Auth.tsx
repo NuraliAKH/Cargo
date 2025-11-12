@@ -1,19 +1,23 @@
-import { Tabs, Form, Input, Button, message, Card, Checkbox } from "antd";
+import { Tabs, Form, Input, Button, message, Card, Checkbox, Space, Select } from "antd";
 import api from "../api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-
+import { GlobalOutlined } from "@ant-design/icons";
+import { Option } from "antd/es/mentions";
 export default function Auth({ onAuth }: { onAuth?: () => void }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [sp] = useSearchParams();
   const nav = useNavigate();
   const start = sp.get("tab") || "login";
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("lang", lng);
+  };
 
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [registerData, setRegisterData] = useState<{ phone: string; password: string; name: string } | null>(null);
   const [cooldown, setCooldown] = useState(0);
-  const [disabled, setDisabled] = useState(false);
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (cooldown > 0) {
@@ -153,8 +157,6 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
           </Button>
         </div>
 
-        {/* Чекбокс 2: маркетинг */}
-
         <Button type="primary" htmlType="submit" className="w-full">
           {t("auth.confirm")}
         </Button>
@@ -163,6 +165,18 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
+      <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
+        <Select
+          defaultValue={i18n.language}
+          style={{ width: 120 }}
+          onChange={changeLanguage}
+          suffixIcon={<GlobalOutlined />}
+        >
+          <Option value="ru">Русский</Option>
+          <Option value="uz">Oʻzbekcha</Option>
+          <Option value="en">English</Option>
+        </Select>
+      </Space>
       <Card className="w-full max-w-md">
         <Tabs
           defaultActiveKey={start}

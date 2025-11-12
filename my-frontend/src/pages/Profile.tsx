@@ -1,4 +1,4 @@
-import { Layout, Menu, Select, Space } from "antd";
+import { Button, Layout, Menu, Select, Space } from "antd";
 import { useState } from "react";
 import {
   HomeOutlined,
@@ -14,13 +14,12 @@ import { Addresses } from "../feautures/profile/components/Adresses";
 import RecipientTable from "../feautures/profile/components/RecipientTable";
 import FlightsList from "../feautures/profile/components/FlightsChess";
 import { Header } from "antd/es/layout/layout";
+import { useNavigate } from "react-router-dom";
 
 const { Sider, Content } = Layout;
 const { Option } = Select;
 
 export default function Profile(me: any) {
-  console.log(me);
-
   const { t, i18n } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("warehouses");
@@ -30,6 +29,12 @@ export default function Profile(me: any) {
     localStorage.setItem("lang", lng);
   };
 
+  const nav = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    nav("/");
+  };
   const renderContent = () => {
     switch (selectedKey) {
       case "warehouses":
@@ -93,6 +98,9 @@ export default function Profile(me: any) {
                 <Option value="uz">Oʻzbekcha</Option>
                 <Option value="en">English</Option>
               </Select>
+            </Space>
+            <Space>
+              <Button onClick={logout}>Выйти</Button>
             </Space>
           </Space>
         </Header>
