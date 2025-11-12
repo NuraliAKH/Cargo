@@ -33,7 +33,7 @@ export default function Profile(me: any) {
 
   const logout = () => {
     localStorage.removeItem("token");
-    nav("/");
+    nav("/auth?tab=login");
   };
   const renderContent = () => {
     switch (selectedKey) {

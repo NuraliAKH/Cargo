@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../../api";
-import { Button, Card, List, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
+import { Button, Card, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
 import AddParcelModal from "./AddParcelModal";
 import styled from "@emotion/styled";
 import {
@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
 
+/* === Styled Components === */
 const ScrollContainer = styled.div`
   display: flex;
   overflow-x: auto;
@@ -40,25 +41,8 @@ const StyledCard = styled(Card)`
   border-radius: 10px;
   border: 1px solid #f0f0f0;
   scroll-snap-align: start;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 `;
-
-interface Parcel {
-  id: string | number;
-  trackCode: string;
-  description: string;
-  price: number;
-  status: string;
-  recipient?: { firstName: string; lastName: string };
-  flight?: { code?: string };
-}
-
-interface Props {
-  parcels: Parcel[];
-  canDelete?: boolean;
-  onDelete: (id: string | number) => void;
-  t: (key: string, params?: any) => string;
-  statusIcons: Record<string, { color: string; icon?: React.ReactNode }>;
-}
 
 export function Parcels() {
   const { t } = useTranslation();
@@ -79,16 +63,11 @@ export function Parcels() {
 
   const statusOptions = [
     { label: t("parcels.all"), value: "ALL", icon: <AppstoreOutlined /> },
-    {
-      label: t("parcels.statuses.AWAITING_AT_WAREHOUSE"),
-      value: "AWAITING_AT_WAREHOUSE",
-      icon: <ClockCircleOutlined />,
-    },
-    { label: t("parcels.statuses.AT_WAREHOUSE"), value: "AT_WAREHOUSE", icon: <InboxOutlined /> },
-    { label: t("parcels.statuses.IN_TRANSIT"), value: "IN_TRANSIT", icon: <CarOutlined /> },
-    { label: t("parcels.statuses.AT_LOCAL_WAREHOUSE"), value: "AT_LOCAL_WAREHOUSE", icon: <ShopOutlined /> },
-    { label: t("parcels.statuses.WITH_COURIER"), value: "WITH_COURIER", icon: <UserOutlined /> },
-    { label: t("parcels.statuses.DELIVERED"), value: "DELIVERED", icon: <CheckCircleOutlined /> },
+    ...Object.entries(statusIcons).map(([key, val]) => ({
+      label: t(`parcels.statuses.${key}`),
+      value: key,
+      icon: val.icon,
+    })),
   ];
 
   const load = () => api.get("/api/parcels/my").then(r => setItems(r.data));
@@ -120,22 +99,20 @@ export function Parcels() {
     >
       {screens.xs ? (
         <>
-          <Button icon={<FilterOutlined />} onClick={() => setShowFilters(prev => !prev)} block>
+          <Button icon={<FilterOutlined />} onClick={() => setShowFilters(p => !p)} block>
             {showFilters ? t("parcels.hideFilters") : t("parcels.showFilters")}
           </Button>
 
           {showFilters && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
-              <Segmented
-                size={screens.xs ? "small" : "middle"}
-                block={screens.xs}
-                options={statusOptions.map(o => ({
-                  value: o.value,
-                  label: <Space>{o.icon}</Space>,
-                }))}
-                onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
-              />
-            </div>
+            <Segmented
+              size="small"
+              block
+              options={statusOptions.map(o => ({
+                value: o.value,
+                label: <Space>{o.icon}</Space>,
+              }))}
+              onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
+            />
           )}
 
           <Button type="primary" onClick={() => setOpenAdd(true)} block>
@@ -145,8 +122,7 @@ export function Parcels() {
       ) : (
         <Space>
           <Segmented
-            size={screens.xs ? "small" : "middle"}
-            block={screens.xs}
+            size="middle"
             options={statusOptions.map(o => ({
               value: o.value,
               label: <Space>{o.icon}</Space>,
@@ -167,12 +143,10 @@ export function Parcels() {
       extra={headerContent}
       style={{ borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
     >
-      <List
-        dataSource={filtered}
-        itemLayout="vertical"
-        renderItem={(p: any) => {
-          const id = p.id ?? p._id;
+      <ScrollContainer>
+        {filtered.map((p: any) => {
           const canDelete = p.status === "AWAITING_AT_WAREHOUSE";
+          const s = statusIcons[p.status];
 
           return (
             <StyledCard key={p.id} bodyStyle={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -196,8 +170,8 @@ export function Parcels() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-                <Tag color={p.status?.color || "default"} icon={p.status?.icon}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <Tag color={s?.color || "default"} icon={s?.icon}>
                   {t(`parcels.statuses.${p.status}`, { defaultValue: p.status })}
                 </Tag>
 
@@ -216,8 +190,9 @@ export function Parcels() {
               </div>
             </StyledCard>
           );
-        }}
-      />
+        })}
+      </ScrollContainer>
+
       <AddParcelModal open={openAdd} onClose={() => setOpenAdd(false)} onCreated={load} />
     </Card>
   );

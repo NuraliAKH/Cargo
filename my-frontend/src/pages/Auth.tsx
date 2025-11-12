@@ -165,19 +165,19 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
-        <Select
-          defaultValue={i18n.language}
-          style={{ width: 120 }}
-          onChange={changeLanguage}
-          suffixIcon={<GlobalOutlined />}
-        >
-          <Option value="ru">Русский</Option>
-          <Option value="uz">Oʻzbekcha</Option>
-          <Option value="en">English</Option>
-        </Select>
-      </Space>
       <Card className="w-full max-w-md">
+        <Space direction="vertical" style={{ width: "100%", alignItems: "center" }}>
+          <Select
+            defaultValue={i18n.language}
+            style={{ width: 120 }}
+            onChange={changeLanguage}
+            suffixIcon={<GlobalOutlined />}
+          >
+            <Option value="ru">Русский</Option>
+            <Option value="uz">Oʻzbekcha</Option>
+            <Option value="en">English</Option>
+          </Select>
+        </Space>
         <Tabs
           defaultActiveKey={start}
           items={[
