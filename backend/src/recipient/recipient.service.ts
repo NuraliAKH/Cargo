@@ -8,7 +8,7 @@ import { RecipientType } from "@prisma/client";
 export class RecipientService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateRecipientDto) {
+  async create(userId: number, dto: CreateRecipientDto) {
     const exists = await this.prisma.recipient.findUnique({
       where: { jshshir: dto.jshshir },
     });
@@ -16,6 +16,7 @@ export class RecipientService {
 
     return this.prisma.recipient.create({
       data: {
+        userId: userId,
         type: dto.type ?? RecipientType.INDIVIDUAL, // <-- default qo‘yish
         firstName: dto.firstName ?? "",
         lastName: dto.lastName ?? "",

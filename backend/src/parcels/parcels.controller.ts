@@ -29,6 +29,8 @@ export class ParcelsController {
   @Get("my")
   async my(@Headers("authorization") auth?: string) {
     const p = this.payload(auth);
+    console.log(p);
+
     return this.prisma.parcel.findMany({ where: { userId: p?.sub }, include: { warehouse: true } });
   }
 

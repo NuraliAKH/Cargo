@@ -36,8 +36,9 @@ export class RecipientController {
     return payload;
   }
   @Post()
-  create(@Body() createRecipientDto: CreateRecipientDto) {
-    return this.recipientService.create(createRecipientDto);
+  create(@Headers("authorization") auth: string, @Body() createRecipientDto: CreateRecipientDto) {
+    const p = this.payload(auth);
+    return this.recipientService.create(p?.sub, createRecipientDto);
   }
 
   @Get()
@@ -48,7 +49,9 @@ export class RecipientController {
   @Get("my")
   async my(@Headers("authorization") auth?: string) {
     const p = this.payload(auth);
-    return this.prisma.parcel.findMany({ where: { userId: p?.sub }, include: { warehouse: true } });
+    console.log(p);
+
+    return this.prisma.recipient.findMany({ where: { userId: p?.sub } });
   }
 
   @Get(":id")

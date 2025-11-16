@@ -28,7 +28,7 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
 
   const login = async (v: any) => {
     try {
-      const { data } = await api.post("https://my.airexpress.uz/api/auth/login", v);
+      const { data } = await api.post("http://localhost:3000/api/auth/login", v);
       localStorage.setItem("token", data.access_token);
       message.success(t("auth.loginSuccess"));
       onAuth?.();
@@ -40,7 +40,7 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
 
   const startRegistration = async (v: any) => {
     try {
-      await api.post("https://my.airexpress.uz/api/auth/register", v);
+      await api.post("http://localhost:3000/api/auth/register", v);
       setRegisterData(v);
       setIsCodeSent(true);
       setCooldown(60);
@@ -53,7 +53,7 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
   const confirmRegistration = async (v: any) => {
     if (!registerData) return;
     try {
-      const { data } = await api.post("https://my.airexpress.uz/api/auth/verify", {
+      const { data } = await api.post("http://localhost:3000/api/auth/verify", {
         phone: registerData.phone,
         code: v.code,
       });
