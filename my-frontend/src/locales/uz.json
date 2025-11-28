@@ -113,6 +113,7 @@
     "delete": "Posilkani o‘chirish?",
     "update": "Yangilash",
     "created": "Posilka yaratildi",
+    "price": "Narxi ($)",
     "updated": "Posilka yangilandi",
     "deleted": "Posilka o‘chirildi",
     "tracking_code": "Trek-kod",

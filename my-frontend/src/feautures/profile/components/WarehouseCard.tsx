@@ -54,7 +54,6 @@ export function WarehouseCard({ warehouse }: WarehouseCardProps) {
           </Tooltip>
         </div>
       }
-      extra={<span>{warehouse.city || ""}</span>}
       className="shadow-md rounded-lg"
     >
       <Descriptions column={1} size="small" bordered={false}>

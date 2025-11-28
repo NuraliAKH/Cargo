@@ -16,7 +16,7 @@ export function Warehouses() {
     <Card title={t("warehousesTitle")} className="h-full">
       <Row gutter={[16, 16]}>
         {data.map((w: any) => (
-          <Col key={w.id} xs={24} sm={24} md={12} lg={12} xl={12}>
+          <Col key={w.id} xs={24} sm={24} md={24} lg={12} xl={12}>
             <WarehouseCard warehouse={w} />
           </Col>
         ))}

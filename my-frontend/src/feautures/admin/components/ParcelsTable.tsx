@@ -135,8 +135,12 @@ export default function ParcelsTable() {
         pagination={{ pageSize: 10, showSizeChanger: true }}
         style={{ minHeight: 400 }}
         columns={[
-          { title: t("parcels.tracking_code"), dataIndex: "trackingCode" },
-          { title: t("parcels.owner"), dataIndex: ["user", "email"], render: v => v || "—" },
+          { title: t("parcels.tracking_code"), dataIndex: "trackCode" },
+          {
+            title: t("parcels.owner"),
+            dataIndex: "recipient",
+            render: v => `${v.firstName}  ${v.lastName} ${v.phone}` || "—",
+          },
           { title: t("parcels.warehouse"), dataIndex: ["warehouse", "name"], render: v => v || "—" },
           {
             title: t("parcels.status"),
@@ -160,7 +164,7 @@ export default function ParcelsTable() {
             render: v => (v ? dayjs(v).format("YYYY-MM-DD HH:mm") : "—"),
           },
           {
-            title: t("parcels.actions"),
+            title: t("flights.actions"),
             fixed: "right",
             render: (_, record) => (
               <Space>

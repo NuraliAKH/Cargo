@@ -117,6 +117,7 @@
     "deleted": "Parcel deleted",
     "tracking_code": "Tracking code",
     "owner": "Owner",
+    "price": "Price ($)",
     "warehouse": "Warehouse",
     "status": "Status",
     "created_at": "Created at",
