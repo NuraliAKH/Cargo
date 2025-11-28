@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Headers, Param, Post } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { JwtService } from "@nestjs/jwt";
 
@@ -23,10 +23,13 @@ export class WarehousesController {
   }
 
   @Delete(":id")
-  delete(@Headers("authorization") auth?: string, @Body() dto?: any) {
+  delete(@Param("id") id: string, @Headers("authorization") auth?: string) {
     const token = auth?.split(" ")[1];
     const p: any = token ? this.jwt.verify(token, { secret: process.env.JWT_SECRET || "secret" }) : null;
     if (p?.role !== "ADMIN") throw new Error("Forbidden");
-    return this.prisma.warehouse.delete({ where: { id: dto.id } });
+
+    return this.prisma.warehouse.delete({
+      where: { id: Number(id) },
+    });
   }
 }

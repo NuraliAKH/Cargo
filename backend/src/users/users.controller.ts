@@ -1,4 +1,14 @@
-import { Body, Controller, ForbiddenException, Get, Headers, Param, Patch } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Headers,
+  NotFoundException,
+  Param,
+  Patch,
+} from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { JwtService } from "@nestjs/jwt";
 
@@ -29,6 +39,21 @@ export class UsersController {
     return this.prisma.user.update({
       where: { id: Number(id) },
       data: { role: role as any },
+      select: { id: true, phone: true, role: true },
+    });
+  }
+
+  @Delete(":id")
+  async remove(@Param("id") id: string, @Headers("authorization") auth?: string) {
+    const token = auth?.split(" ")[1];
+    const p: any = token ? this.jwt.verify(token, { secret: process.env.JWT_SECRET || "secret" }) : null;
+    if (p?.role !== "ADMIN") throw new ForbiddenException("Forbidden");
+
+    const user = await this.prisma.user.findUnique({ where: { id: Number(id) } });
+    if (!user) throw new NotFoundException("User not found");
+
+    return this.prisma.user.delete({
+      where: { id: Number(id) },
       select: { id: true, phone: true, role: true },
     });
   }
