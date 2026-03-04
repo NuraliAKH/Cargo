@@ -114,7 +114,7 @@
       "arrivalAt": "Дата прибытия",
       "actions": "Действия"
     },
-    "status": {
+    "statuses": {
       "SCHEDULED": "Запланирован",
       "DEPARTED": "Вылетел",
       "ARRIVED": "Прибыл",

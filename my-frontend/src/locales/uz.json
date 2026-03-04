@@ -93,22 +93,34 @@
   },
   "flights": {
     "title": "Reyslar",
-    "add_flight": "Reys qo‘shish",
+    "add": "Reys qo'shish",
+    "add_flight": "Reys qo'shish",
     "edit_flight": "Reysni tahrirlash",
-    "code": "Kod",
-    "status": "Holat",
-    "departure_from": "Jo‘nash shahri",
-    "arrival_to": "Kelish shahri",
-    "departure_date": "Jo‘nash sanasi",
-    "arrival_date": "Kelish sanasi",
-    "actions": "Harakatlar",
     "edit": "Tahrirlash",
-    "delete": "O‘chirish",
-    "delete_confirm": "Reysni o‘chirishni istaysizmi?",
-    "error_load": "Reyslarni yuklashda xatolik",
-    "error_save": "Reysni saqlashda xatolik",
-    "success_save": "Reys saqlandi",
-    "success_delete": "Reys o‘chirildi",
+    "delete": "O'chirish",
+    "created": "Reys yaratildi",
+    "updated": "Reys yangilandi",
+    "deleted": "Reys o'chirildi",
+    "confirmDelete": "Ushbu reysni o'chirilsinmi?",
+    "columns": {
+      "code": "Kod",
+      "status": "Holat",
+      "departureFrom": "Jo'nash",
+      "arrivalTo": "Kelish",
+      "departureAt": "Jo'nash sanasi",
+      "arrivalAt": "Kelish sanasi",
+      "actions": "Harakatlar"
+    },
+    "form": {
+      "code": "Reys kodi",
+      "status": "Holat",
+      "departureFrom": "Jo'nash shahri",
+      "departureFromRequired": "Jo'nash shahrini kiriting",
+      "arrivalTo": "Kelish shahri",
+      "arrivalToRequired": "Kelish shahrini kiriting",
+      "dates": "Sana diapazoni",
+      "datesRequired": "Sana diapazoni tanlang"
+    },
     "statuses": {
       "SCHEDULED": "Rejalashtirilgan",
       "DEPARTED": "Jo‘nab ketdi",
@@ -116,7 +128,7 @@
       "CANCELLED": "Bekor qilindi"
     },
     "refresh": "Yangilash",
-    "noStatus": "Status yo‘q"
+    "noStatus": "Holat yo'q"
   },
   "parcels": {
     "all": "Barcha posilkalar",

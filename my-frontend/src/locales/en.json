@@ -93,6 +93,7 @@
   },
   "flights": {
     "title": "Flights",
+    "add": "Add flight",
     "add_flight": "Add flight",
     "edit_flight": "Edit flight",
     "code": "Code",
@@ -109,14 +110,37 @@
     "error_save": "Error saving flight",
     "success_save": "Flight saved",
     "success_delete": "Flight deleted",
+    "created": "Flight created",
+    "updated": "Flight updated",
+    "deleted": "Flight deleted",
+    "confirmDelete": "Delete this flight?",
+    "refresh": "Refresh",
+    "noStatus": "No status",
+    "columns": {
+      "code": "Code",
+      "status": "Status",
+      "departureFrom": "From",
+      "arrivalTo": "To",
+      "departureAt": "Departure",
+      "arrivalAt": "Arrival",
+      "actions": "Actions"
+    },
+    "form": {
+      "code": "Flight Code",
+      "status": "Status",
+      "departureFrom": "Departure City",
+      "arrivalTo": "Arrival City",
+      "dates": "Date Range",
+      "departureFromRequired": "Enter departure city",
+      "arrivalToRequired": "Enter arrival city",
+      "datesRequired": "Select date range"
+    },
     "statuses": {
       "SCHEDULED": "Scheduled",
       "DEPARTED": "Departed",
       "ARRIVED": "Arrived",
       "CANCELLED": "Cancelled"
-    },
-    "refresh": "Refresh",
-    "noStatus": "No status"
+    }
   },
   "parcels": {
     "all": "All parcels",
