@@ -220,8 +220,11 @@
     "errCountry": "Mamlakatni kiriting"
   },
 
-  "recipients": {
-    "add": "Qabul qiluvchini qo‘shish",
+  "recipients": {    "title": "Qabul qiluvchilar",
+    "total": "jami",
+    "noData": "Qabul qiluvchilar yo'q",
+    "cancel": "Bekor qilish",
+    "update": "Yangilash",    "add": "Qabul qiluvchini qo‘shish",
     "edit": "Tahrirlash",
     "delete": "O‘chirish",
     "editTitle": "Qabul qiluvchini tahrirlash",

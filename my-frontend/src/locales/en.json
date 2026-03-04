@@ -221,6 +221,11 @@
     "errCountry": "Enter country"
   },
   "recipients": {
+    "title": "Recipients",
+    "total": "total",
+    "noData": "No recipients",
+    "cancel": "Cancel",
+    "update": "Update",
     "add": "Add recipient",
     "edit": "Edit",
     "delete": "Delete",

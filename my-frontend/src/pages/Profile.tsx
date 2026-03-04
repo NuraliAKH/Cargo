@@ -1,4 +1,4 @@
-import { Button, Layout, Menu, Select, Space, Grid, Drawer } from "antd";
+import { Button, Layout, Menu, Select, Space, Grid, Drawer, Avatar, Tooltip } from "antd";
 import { useState } from "react";
 import {
   HomeOutlined,
@@ -7,6 +7,7 @@ import {
   MenuUnfoldOutlined,
   GlobalOutlined,
   MenuOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { Warehouses } from "../feautures/profile/components/WareHouse";
@@ -16,9 +17,114 @@ import RecipientTable from "../feautures/profile/components/RecipientTable";
 import FlightsList from "../feautures/profile/components/FlightsChess";
 import { Header } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
+import styled from "@emotion/styled";
 
 const { Sider, Content } = Layout;
 const { Option } = Select;
+
+const SiderWrapper = styled.div`
+  .ant-layout-sider {
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+
+  .ant-menu {
+    border: none !important;
+    background: transparent;
+  }
+
+  .ant-menu-item {
+    margin: 8px 8px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(24, 144, 255, 0.1) !important;
+    }
+  }
+
+  .ant-menu-item-selected {
+    background: linear-gradient(135deg, #1890ff 0%, #0050b3 100%) !important;
+    color: white !important;
+
+    .ant-menu-title-content {
+      color: white !important;
+      font-weight: 600;
+    }
+  }
+
+  .ant-menu-inline-collapsed {
+    width: 80px;
+
+    .ant-menu-item {
+      text-align: center;
+      padding-left: 0 !important;
+    }
+  }
+`;
+
+const HeaderWrapper = styled.div`
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 16px;
+
+  @media (max-width: 576px) {
+    padding: 8px 12px;
+  }
+
+  .header-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      @media (max-width: 576px) {
+        display: none;
+      }
+
+      .user-name {
+        font-weight: 600;
+        color: #1890ff;
+        margin: 0;
+      }
+
+      .user-id {
+        font-size: 12px;
+        color: #999;
+        margin: 0;
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    @media (max-width: 576px) {
+      gap: 8px;
+    }
+  }
+`;
+
+const ContentWrapper = styled.div`
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 16px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 8px;
+  }
+`;
 
 export default function Profile(me: any) {
   const { t, i18n } = useTranslation();
@@ -73,22 +179,54 @@ export default function Profile(me: any) {
     <Layout className="min-h-screen" style={{ background: "#f5f5f5" }}>
       {/* Desktop Sidebar */}
       {!screens.xs && !screens.sm && (
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={setCollapsed}
-          width={250}
-          className="shadow-md"
-          style={{ background: "#f5f5f5", borderRight: "1px solid #f0f0f0" }}
-        >
-          <Menu
-            style={{ background: "#f5f5f5" }}
-            mode="inline"
-            selectedKeys={[selectedKey]}
-            onClick={e => setSelectedKey(e.key)}
-            items={menuItems}
-          />
-        </Sider>
+        <SiderWrapper>
+          <Sider
+            width={250}
+            collapsedWidth={80}
+            collapsed={collapsed}
+            onCollapse={setCollapsed}
+            trigger={null}
+            className="shadow-md"
+            style={{
+              background: "#f5f5f5",
+              borderRight: "1px solid #f0f0f0",
+              position: "sticky",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflow: "auto",
+            }}
+          >
+            <div
+              style={{
+                padding: "8px 0",
+                textAlign: "center",
+                minHeight: 64,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                type="text"
+                icon={collapsed ? <MenuOutlined /> : <MenuUnfoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{ fontSize: 18, width: 40, height: 40 }}
+              />
+            </div>
+            <Menu
+              style={{
+                background: "#f5f5f5",
+                border: "none",
+              }}
+              mode="inline"
+              inlineCollapsed={collapsed}
+              selectedKeys={[selectedKey]}
+              onClick={e => setSelectedKey(e.key)}
+              items={menuItems}
+            />
+          </Sider>
+        </SiderWrapper>
       )}
 
       {/* Mobile Drawer */}
