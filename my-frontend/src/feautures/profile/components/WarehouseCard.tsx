@@ -1,6 +1,8 @@
-import { Card, Descriptions, message, Tooltip } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import { Card, Descriptions, message, Tooltip, Button, Space, Grid } from "antd";
+import { CopyOutlined, GlobalOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+
+const { useBreakpoint } = Grid;
 
 export interface Warehouse {
   id: number;
@@ -23,6 +25,7 @@ interface WarehouseCardProps {
 
 export function WarehouseCard({ warehouse }: WarehouseCardProps) {
   const { t } = useTranslation();
+  const screens = useBreakpoint();
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -44,98 +47,129 @@ export function WarehouseCard({ warehouse }: WarehouseCardProps) {
   return (
     <Card
       title={
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span>{warehouse.name || t("warehouseDefault")}</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: screens.xs ? 14 : 16, fontWeight: 600 }}>
+            {warehouse.name || t("warehouseDefault")}
+          </span>
           <Tooltip title={t("copyAll")}>
-            <CopyOutlined
+            <Button
+              type="text"
+              icon={<CopyOutlined />}
               onClick={() => copyToClipboard(fullText)}
-              style={{ cursor: "pointer", fontSize: 20, color: "#1890ff" }}
+              style={{ color: "#1890ff" }}
+              size={screens.xs ? "small" : "middle"}
             />
           </Tooltip>
         </div>
       }
-      className="shadow-md rounded-lg"
+      style={{
+        borderRadius: 12,
+        border: "1px solid #f0f0f0",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
+        height: "100%",
+        transition: "all 0.3s ease",
+      }}
+      hoverable
+      styles={{ body: { padding: screens.xs ? "12px" : "16px" } }}
     >
-      <Descriptions column={1} size="small" bordered={false}>
+      <Descriptions column={1} size="small" bordered={false} labelStyle={{ fontWeight: 500, color: "#666" }}>
         {warehouse.firstName && (
           <Descriptions.Item label={t("labels.firstName")}>
-            {warehouse.firstName}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.firstName!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.firstName}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.firstName!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.lastName && (
           <Descriptions.Item label={t("labels.lastName")}>
-            {warehouse.lastName}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.lastName!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.lastName}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.lastName!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.addresLine1 && (
           <Descriptions.Item label={t("labels.addressLine1")}>
-            {warehouse.addresLine1}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.addresLine1!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span style={{ wordBreak: "break-word" }}>{warehouse.addresLine1}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.addresLine1!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14, flexShrink: 0 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.addresLine2 && (
           <Descriptions.Item label={t("labels.addressLine2")}>
-            {warehouse.addresLine2}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.addresLine2!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span style={{ wordBreak: "break-word" }}>{warehouse.addresLine2}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.addresLine2!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14, flexShrink: 0 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.city && (
           <Descriptions.Item label={t("labels.city")}>
-            {warehouse.city}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.city!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.city}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.city!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.state && (
           <Descriptions.Item label={t("labels.state")}>
-            {warehouse.state}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.state!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.state}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.state!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.zipcode && (
           <Descriptions.Item label={t("labels.zipcode")}>
-            {warehouse.zipcode}
-            <CopyOutlined
-              onClick={() => copyToClipboard(String(warehouse.zipcode))}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.zipcode}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(String(warehouse.zipcode))}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.telephone && (
           <Descriptions.Item label={t("labels.telephone")}>
-            {warehouse.telephone}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.telephone!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.telephone}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.telephone!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
         {warehouse.cell && (
           <Descriptions.Item label={t("labels.cell")}>
-            {warehouse.cell}
-            <CopyOutlined
-              onClick={() => copyToClipboard(warehouse.cell!)}
-              style={{ cursor: "pointer", marginLeft: 8, color: "#1890ff" }}
-            />
+            <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <span>{warehouse.cell}</span>
+              <CopyOutlined
+                onClick={() => copyToClipboard(warehouse.cell!)}
+                style={{ cursor: "pointer", color: "#1890ff", fontSize: 14 }}
+              />
+            </Space>
           </Descriptions.Item>
         )}
       </Descriptions>

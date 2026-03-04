@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../../api";
-import { Button, Card, message, Popconfirm, Segmented, Tag, Typography, Space, Grid } from "antd";
+import { Button, Card, message, Popconfirm, Segmented, Tag, Typography, Space, Grid, Empty } from "antd";
 import AddParcelModal from "./AddParcelModal";
 import styled from "@emotion/styled";
 import {
@@ -20,28 +20,40 @@ const { useBreakpoint } = Grid;
 
 /* === Styled Components === */
 const ScrollContainer = styled.div`
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding-bottom: 8px;
-  scroll-snap-type: x mandatory;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #d9d9d9;
-    border-radius: 10px;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 `;
 
 const StyledCard = styled(Card)`
-  min-width: 280px;
-  flex: 0 0 auto;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #f0f0f0;
-  scroll-snap-align: start;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .ant-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (max-width: 768px) {
+    border-radius: 8px;
+  }
 `;
 
 export function Parcels() {
@@ -90,49 +102,48 @@ export function Parcels() {
 
   const headerContent = (
     <Space
-      direction="vertical"
+      direction={screens.xs ? "vertical" : "horizontal"}
       style={{
-        width: "100%",
-        justifyContent: screens.xs ? "flex-start" : "flex-end",
-        alignItems: screens.xs ? "stretch" : "center",
+        width: screens.xs ? "100%" : "auto",
       }}
+      size="small"
     >
       {screens.xs ? (
         <>
-          <Button icon={<FilterOutlined />} onClick={() => setShowFilters(p => !p)} block>
+          <Button icon={<FilterOutlined />} onClick={() => setShowFilters(p => !p)} block size="middle">
             {showFilters ? t("parcels.hideFilters") : t("parcels.showFilters")}
           </Button>
 
           {showFilters && (
             <Segmented
-              size="small"
               block
+              value={filter || "ALL"}
               options={statusOptions.map(o => ({
                 value: o.value,
-                label: <Space>{o.icon}</Space>,
+                icon: o.icon,
               }))}
               onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
             />
           )}
 
-          <Button type="primary" onClick={() => setOpenAdd(true)} block>
+          <Button type="primary" onClick={() => setOpenAdd(true)} block size="middle">
             {t("parcels.add")}
           </Button>
         </>
       ) : (
-        <Space>
+        <>
           <Segmented
-            size="middle"
+            value={filter || "ALL"}
             options={statusOptions.map(o => ({
               value: o.value,
-              label: <Space>{o.icon}</Space>,
+              icon: o.icon,
             }))}
             onChange={(v: any) => setFilter(v === "ALL" ? undefined : v)}
           />
           <Button type="primary" onClick={() => setOpenAdd(true)}>
             {t("parcels.add")}
           </Button>
-        </Space>
+        </>
       )}
     </Space>
   );
@@ -142,56 +153,73 @@ export function Parcels() {
       title={t("parcels.title")}
       extra={headerContent}
       style={{ borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
+      styles={{ body: { padding: screens.xs ? "12px" : "24px" } }}
     >
-      <ScrollContainer>
-        {filtered.map((p: any) => {
-          const canDelete = p.status === "AWAITING_AT_WAREHOUSE";
-          const s = statusIcons[p.status];
+      {filtered.length === 0 ? (
+        <Empty description={t("parcels.all")} />
+      ) : (
+        <ScrollContainer>
+          {filtered.map((p: any) => {
+            const canDelete = p.status === "AWAITING_AT_WAREHOUSE";
+            const s = statusIcons[p.status];
 
-          return (
-            <StyledCard key={p.id} bodyStyle={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <div>
-                <Text strong>{p.trackCode}</Text> — {p.description}
-                <div style={{ marginTop: 6 }}>
+            return (
+              <StyledCard key={p.id} size="small">
+                <Space direction="vertical" style={{ width: "100%" }} size="middle">
                   <div>
-                    <Text type="secondary">{t("parcels.price")}:</Text> {p.price} $
+                    <Text strong style={{ fontSize: 16 }}>
+                      {p.trackCode}
+                    </Text>
+                    <div style={{ marginTop: 4 }}>
+                      <Text type="secondary" style={{ fontSize: 14 }}>
+                        {p.description}
+                      </Text>
+                    </div>
                   </div>
-                  {p.recipient && (
-                    <div>
-                      <Text type="secondary">{t("parcels.recipient")}:</Text>{" "}
-                      {`${p.recipient.lastName} ${p.recipient.firstName}`}
-                    </div>
-                  )}
-                  {p.flight && (
-                    <div>
-                      <Text type="secondary">{t("parcels.flight")}:</Text> {p.flight.code ?? t("parcels.noFlight")}
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <Tag color={s?.color || "default"} icon={s?.icon}>
-                  {t(`parcels.statuses.${p.status}`, { defaultValue: p.status })}
-                </Tag>
+                  <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <Text type="secondary">{t("parcels.price")}:</Text>
+                      <Text strong>${p.price}</Text>
+                    </div>
+                    {p.recipient && (
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Text type="secondary">{t("parcels.recipient")}:</Text>
+                        <Text>{`${p.recipient.lastName} ${p.recipient.firstName}`}</Text>
+                      </div>
+                    )}
+                    {p.flight && (
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Text type="secondary">{t("parcels.flight")}:</Text>
+                        <Text>{p.flight.code ?? t("parcels.noFlight")}</Text>
+                      </div>
+                    )}
+                  </Space>
 
-                {canDelete && (
-                  <Popconfirm
-                    title={t("parcels.confirmDelete")}
-                    okText={t("parcels.yes")}
-                    cancelText={t("parcels.no")}
-                    onConfirm={() => onDelete(p.id)}
-                  >
-                    <Button danger size="small">
-                      {t("parcels.delete")}
-                    </Button>
-                  </Popconfirm>
-                )}
-              </div>
-            </StyledCard>
-          );
-        })}
-      </ScrollContainer>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: "auto" }}>
+                    <Tag color={s?.color || "default"} icon={s?.icon} style={{ margin: 0, padding: "4px 8px" }}>
+                      {t(`parcels.statuses.${p.status}`, { defaultValue: p.status })}
+                    </Tag>
+
+                    {canDelete && (
+                      <Popconfirm
+                        title={t("parcels.confirmDelete")}
+                        okText={t("parcels.yes")}
+                        cancelText={t("parcels.no")}
+                        onConfirm={() => onDelete(p.id)}
+                      >
+                        <Button danger size="small" block>
+                          {t("parcels.delete")}
+                        </Button>
+                      </Popconfirm>
+                    )}
+                  </div>
+                </Space>
+              </StyledCard>
+            );
+          })}
+        </ScrollContainer>
+      )}
 
       <AddParcelModal open={openAdd} onClose={() => setOpenAdd(false)} onCreated={load} />
     </Card>
