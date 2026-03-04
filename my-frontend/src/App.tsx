@@ -69,7 +69,7 @@ export default function App() {
                         <Option value="en">English</Option>
                       </Select>
                     </Space>
-                    <Button onClick={logout}>Выйти</Button>
+                    <Button onClick={logout}>{t("common.logout")}</Button>
                   </div>
                 ) : (
                   <div className="space-x-2">
@@ -86,16 +86,16 @@ export default function App() {
                       </Select>
                     </Space>
                     <Link to="/auth?tab=login">
-                      <Button>Войти</Button>
+                      <Button>{t("common.login")}</Button>
                     </Link>
                     <Link to="/auth?tab=register">
-                      <Button type="primary">Зарегистрироваться</Button>
+                      <Button type="primary">{t("common.register")}</Button>
                     </Link>
                   </div>
                 )}
               </div>
             ) : (
-              <Button onClick={() => setOpen(true)}>Меню</Button>
+              <Button onClick={() => setOpen(true)}>{t("common.menu")}</Button>
             )}
           </Layout.Header>
         )}

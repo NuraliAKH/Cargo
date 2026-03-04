@@ -100,7 +100,7 @@ export default function Profile(me: any) {
               </Select>
             </Space>
             <Space>
-              <Button onClick={logout}>Выйти</Button>
+              <Button onClick={logout}>{t("common.logout")}</Button>
             </Space>
           </Space>
         </Header>

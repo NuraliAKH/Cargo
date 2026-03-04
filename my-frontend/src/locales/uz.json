@@ -1,4 +1,14 @@
 {
+  "common": {
+    "login": "Kirish",
+    "register": "Ro'yxatdan o'tish",
+    "logout": "Chiqish",
+    "menu": "Menyu",
+    "yes": "Ha",
+    "no": "Yo‘q",
+    "delete": "O‘chirish",
+    "save": "Saqlash"
+  },
   "admin": {
     "title": "Admin Panel",
     "tabs": {
@@ -29,7 +39,11 @@
     "codeSent": "Kod telefon raqamingizga yuborildi",
     "error": "Xatolik",
     "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli",
-    "invalidCode": "Kod noto‘g‘ri"
+    "invalidCode": "Kod noto'g'ri",
+    "offerRequired": "Shartlarni qabul qilish kerak",
+    "marketingRequired": "Marketing shartlarni qabul qilish kerak",
+    "offerText": "Men ommaviy taklif va maxfiylik siyosati bilan tanishganimni tasdiqlayman va ularning shartlarini qabul qilaman.",
+    "marketingText": "Men AirExpress dan elektron aloqa vositalari (email, SMS) orqali xabarlar, shaxsiylashtirilgan marketing materiallari, shu jumladan sotib olish imtiyozlarimga asoslangan takliflarni qabul qilishga roziman."
   },
   "profile": {
     "menu": {
@@ -195,12 +209,7 @@
     "errCity": "Shaharni kiriting",
     "errCountry": "Mamlakatni kiriting"
   },
-  "common": {
-    "yes": "Ha",
-    "no": "Yo‘q",
-    "delete": "O‘chirish",
-    "save": "Saqlash"
-  },
+
   "recipients": {
     "add": "Qabul qiluvchini qo‘shish",
     "edit": "Tahrirlash",

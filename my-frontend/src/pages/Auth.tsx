@@ -2,7 +2,7 @@ import { Tabs, Form, Input, Button, message, Card, Checkbox, Space, Select } fro
 import api from "../api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { GlobalOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
 export default function Auth({ onAuth }: { onAuth?: () => void }) {
@@ -120,15 +120,17 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
           rules={[{ required: true, message: t("auth.offerRequired") }]}
         >
           <Checkbox>
-            Я подтверждаю, что ознакомлен(-на) с{" "}
-            <a href="/offer.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2291e3" }}>
-              публичной офертой
-            </a>{" "}
-            и{" "}
-            <a href="/privacy.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2291e3" }}>
-              политикой конфиденциальности
-            </a>
-            , и принимаю их положения.
+            <Trans i18nKey="auth.offerText">
+              Я подтверждаю, что ознакомлен(-на) с{" "}
+              <a href="/offer.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2291e3" }}>
+                публичной офертой
+              </a>{" "}
+              и{" "}
+              <a href="/privacy.pdf" target="_blank" rel="noopener noreferrer" style={{ color: "#2291e3" }}>
+                политикой конфиденциальности
+              </a>
+              , и принимаю их положения.
+            </Trans>
           </Checkbox>
         </Form.Item>
         <Form.Item
@@ -136,10 +138,7 @@ export default function Auth({ onAuth }: { onAuth?: () => void }) {
           valuePropName="checked"
           rules={[{ required: true, message: t("auth.marketingRequired") }]}
         >
-          <Checkbox>
-            Я согласен(-на) получать от AirExpress сообщения средствами электронной связи (email, SMS),
-            персонализированные маркетинговые материалы, включая предложения на основе моих покупательских предпочтений.
-          </Checkbox>
+          <Checkbox>{t("auth.marketingText")}</Checkbox>
         </Form.Item>
 
         <Button type="primary" htmlType="submit" className="w-full">

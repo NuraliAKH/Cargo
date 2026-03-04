@@ -1,4 +1,14 @@
 {
+  "common": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "menu": "Menu",
+    "yes": "Yes",
+    "no": "No",
+    "delete": "Delete",
+    "save": "Save"
+  },
   "admin": {
     "title": "Admin Panel",
     "tabs": {
@@ -29,7 +39,11 @@
     "codeSent": "Code sent to your number",
     "error": "Error",
     "registerSuccess": "Registration completed",
-    "invalidCode": "Invalid code"
+    "invalidCode": "Invalid code",
+    "offerRequired": "You must accept the terms",
+    "marketingRequired": "You must accept marketing agreement",
+    "offerText": "I confirm that I have read the public offer and privacy policy, and accept their terms.",
+    "marketingText": "I agree to receive from AirExpress messages via electronic communication (email, SMS), personalized marketing materials, including offers based on my purchasing preferences."
   },
   "profile": {
     "menu": {
@@ -195,12 +209,6 @@
     "errLine1": "Enter address",
     "errCity": "Enter city",
     "errCountry": "Enter country"
-  },
-  "common": {
-    "yes": "Yes",
-    "no": "No",
-    "delete": "Delete",
-    "save": "Save"
   },
   "recipients": {
     "add": "Add recipient",
